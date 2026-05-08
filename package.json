@@ -1,7 +1,5 @@
 {
-  "name": "ai-world-sim",
-  "version": "1.0.0",
   "dependencies": {
-    "@google/generative-ai": "latest"
+    "groq-sdk": "latest"
   }
 }
