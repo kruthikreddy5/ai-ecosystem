@@ -3,8 +3,8 @@
 // REPLACE ENTIRE index.js
 // ===============================
 
-import Groq from "groq-sdk";
-import fs from "fs";
+const Groq = require("groq-sdk");
+const fs = require("fs");
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
