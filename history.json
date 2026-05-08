@@ -82,5 +82,19 @@
     "timestamp": "12:59:32 PM",
     "createdAt": 1778245172634,
     "id": 6
+  },
+  {
+    "x": 60,
+    "y": 80,
+    "event": "In a bold move to expand its territorial influence, the Helios Directorate seizes control of the disputed planetoid, Delta-9. Sol Union denounces the move as an aggression.",
+    "type": "war",
+    "severity": 2,
+    "faction": "Helios Directorate",
+    "radius": 20,
+    "impact": 60,
+    "lifespan": 240,
+    "timestamp": "2:53:37 PM",
+    "createdAt": 1778252017061,
+    "id": 7
   }
 ]
