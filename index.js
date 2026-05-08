@@ -1,22 +1,32 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const Groq = require("groq-sdk");
 const fs = require("fs");
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 async function run() {
-  try {
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    // Switch to 'gemini-1.5-flash' - most reliable for free tier
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const historyFile = "history.json";
+  let history = fs.existsSync(historyFile) ? JSON.parse(fs.readFileSync(historyFile)) : [];
 
-    const prompt = "A new era begins in the digital world. What is the first major event?";
-    
-    const result = await model.generateContent(prompt);
-    const text = result.response.text();
-    
-    console.log("AI SAYS:", text);
-    
-    fs.appendFileSync("history.md", `\n\n[${new Date().toLocaleString()}] - ${text}`);
+  const prompt = `You are a world-building engine. 
+  Current History: ${JSON.stringify(history.slice(-3))}
+  Generate a new event in a coordinates-based world (Map size 100x100).
+  Output ONLY a JSON object like this:
+  { "x": 45, "y": 62, "event": "Agent Kruthik discovered a glowing monolith.", "type": "discovery" }`;
+
+  try {
+    const chat = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: "llama-3.1-8b-instant",
+      response_format: { type: "json_object" }
+    });
+
+    const newEvent = JSON.parse(chat.choices[0].message.content);
+    newEvent.timestamp = new Date().toLocaleTimeString();
+    history.push(newEvent);
+
+    fs.writeFileSync(historyFile, JSON.stringify(history, null, 2));
+    console.log("New world event added at:", newEvent.x, newEvent.y);
   } catch (err) {
-    console.error("403 ERROR CHECK:", err.message);
+    console.error("GROQ ERROR:", err.message);
     process.exit(1);
   }
 }
