@@ -5,5 +5,12 @@
     "event": "The nomadic tribes of the north and the city-state of Azura engage in a brutal battle over precious resources.",
     "type": "war",
     "timestamp": "8:29:26 AM"
+  },
+  {
+    "x": 87,
+    "y": 31,
+    "event": "A rival city-state of Azura's forms a secret alliance with the north's warring tribes against a common threat.",
+    "type": "war",
+    "timestamp": "8:33:24 AM"
   }
 ]
