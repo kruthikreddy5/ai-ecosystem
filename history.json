@@ -124,5 +124,19 @@
     "timestamp": "5:43:21 PM",
     "createdAt": 1778262201322,
     "id": 9
+  },
+  {
+    "x": 45,
+    "y": 20,
+    "event": "The Sol Union, seeking to diversify its economy and capitalize on the Helios Directorate's depleted resources, establishes a lucrative trade agreement with the Northern Accord, exchanging rare minerals for cutting-edge technology.",
+    "type": "trade",
+    "severity": 2,
+    "faction": "Sol Union",
+    "radius": 20,
+    "impact": 70,
+    "lifespan": 360,
+    "timestamp": "6:57:43 PM",
+    "createdAt": 1778266663414,
+    "id": 10
   }
 ]
