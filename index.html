@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -23,8 +24,8 @@ html,body{
   width:100%;
   height:100%;
   overflow:hidden;
-  background:#02050b;
   font-family:Inter,system-ui,sans-serif;
+  background:#03060d;
   color:white;
 }
 
@@ -33,9 +34,9 @@ html,body{
 body{
   background:
     radial-gradient(circle at top,
-    #122033 0%,
-    #050914 45%,
-    #010203 100%);
+    #15253d 0%,
+    #09111d 35%,
+    #03060d 100%);
 }
 
 /* STARS */
@@ -45,12 +46,12 @@ body{
   inset:0;
   background-image:
     radial-gradient(white .8px, transparent .8px);
-  background-size:120px 120px;
-  opacity:.08;
+  background-size:140px 140px;
+  opacity:.07;
   pointer-events:none;
 }
 
-/* GRID OVERLAY */
+/* SCANLINES */
 
 .scanlines{
   position:fixed;
@@ -58,8 +59,8 @@ body{
   background:
     repeating-linear-gradient(
       to bottom,
-      rgba(255,255,255,.015),
-      rgba(255,255,255,.015) 1px,
+      rgba(255,255,255,.01),
+      rgba(255,255,255,.01) 1px,
       transparent 1px,
       transparent 4px
     );
@@ -80,8 +81,8 @@ body{
 #map{
   flex:1;
   height:100%;
+  background:#03060d;
   position:relative;
-  background:#050914;
 }
 
 /* ATMOSPHERE */
@@ -91,19 +92,19 @@ body{
   inset:0;
   background:
     radial-gradient(circle at center,
-    transparent 45%,
-    rgba(0,0,0,.55));
+    transparent 40%,
+    rgba(0,0,0,.6));
   pointer-events:none;
   z-index:500;
 }
 
-/* RIGHT PANEL */
+/* PANEL */
 
 .panel{
   width:360px;
   height:100%;
-  background:rgba(7,12,20,.88);
-  backdrop-filter:blur(24px);
+  background:rgba(8,12,20,.88);
+  backdrop-filter:blur(20px);
   border-left:1px solid rgba(255,255,255,.05);
   display:flex;
   flex-direction:column;
@@ -114,7 +115,7 @@ body{
 
 .header{
   padding:28px;
-  border-bottom:1px solid rgba(255,255,255,.06);
+  border-bottom:1px solid rgba(255,255,255,.05);
 }
 
 .title{
@@ -125,9 +126,9 @@ body{
 
 .subtitle{
   margin-top:8px;
-  color:rgba(255,255,255,.45);
   font-size:13px;
-  line-height:1.5;
+  line-height:1.6;
+  color:rgba(255,255,255,.45);
 }
 
 /* STATS */
@@ -141,8 +142,8 @@ body{
 
 .stat{
   background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.05);
-  border-radius:20px;
+  border:1px solid rgba(255,255,255,.04);
+  border-radius:18px;
   padding:16px;
 }
 
@@ -154,7 +155,7 @@ body{
 }
 
 .stat-value{
-  font-size:24px;
+  font-size:22px;
   font-weight:700;
 }
 
@@ -163,10 +164,10 @@ body{
 .narration{
   margin:0 20px 20px;
   padding:18px;
-  border-radius:20px;
+  border-radius:18px;
   background:rgba(255,255,255,.03);
   border:1px solid rgba(255,255,255,.04);
-  color:rgba(255,255,255,.7);
+  color:rgba(255,255,255,.72);
   line-height:1.6;
   font-size:14px;
 }
@@ -180,17 +181,17 @@ body{
 }
 
 .feed-title{
-  color:rgba(255,255,255,.4);
   margin-bottom:14px;
-  text-transform:uppercase;
   font-size:12px;
   letter-spacing:1px;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.4);
 }
 
 .event{
   background:rgba(255,255,255,.03);
   border:1px solid rgba(255,255,255,.05);
-  border-radius:20px;
+  border-radius:18px;
   padding:18px;
   margin-bottom:14px;
   animation:fade .5s ease;
@@ -208,10 +209,10 @@ body{
 }
 
 .event-type{
+  margin-bottom:10px;
   font-size:11px;
   text-transform:uppercase;
   letter-spacing:1px;
-  margin-bottom:10px;
 }
 
 .event-text{
@@ -251,7 +252,7 @@ body{
 /* LEAFLET */
 
 .leaflet-container{
-  background:#050914 !important;
+  background:#03060d !important;
 }
 
 .leaflet-control-attribution{
@@ -276,7 +277,7 @@ body{
     width:100%;
     height:40vh;
     border-left:none;
-    border-top:1px solid rgba(255,255,255,.06);
+    border-top:1px solid rgba(255,255,255,.05);
   }
 
 }
@@ -329,9 +330,7 @@ body{
 
       <div class="stat">
         <div class="stat-label">Era</div>
-        <div class="stat-value" id="era">
-          Emergence
-        </div>
+        <div class="stat-value" id="era">Unknown</div>
       </div>
 
     </div>
@@ -371,13 +370,13 @@ const bounds = [[0,0],[100,100]];
 
 map.fitBounds(bounds);
 
-/* FIX MOBILE */
+/* MOBILE FIX */
 
 window.addEventListener("load",()=>{
 
   setTimeout(()=>{
     map.invalidateSize();
-  },400);
+  },500);
 
 });
 
@@ -413,12 +412,14 @@ const territoryLayer =
 const eventLayer =
   L.layerGroup().addTo(map);
 
-/* LOAD WORLD */
+/* WORLD */
 
 async function loadWorld(){
 
   const response =
-    await fetch('./world.json');
+    await fetch(
+      './world.json?t=' + Date.now()
+    );
 
   const world =
     await response.json();
@@ -426,22 +427,22 @@ async function loadWorld(){
   document.getElementById(
     "stability"
   ).innerText =
-    world.stability + "%";
+    (world.stability || 0) + "%";
 
   document.getElementById(
     "economy"
   ).innerText =
-    world.economy + "%";
+    (world.economy || 0) + "%";
 
   document.getElementById(
     "cycle"
   ).innerText =
-    world.cycle;
+    world.cycle || 0;
 
   document.getElementById(
     "era"
   ).innerText =
-    world.era;
+    world.era || "Unknown";
 
   /* NARRATION */
 
@@ -450,21 +451,21 @@ async function loadWorld(){
   if(world.stability < 40){
 
     text =
-    "Global instability rising across multiple sectors.";
+      "Global instability increasing across multiple regions.";
 
   }
 
   else if(world.economy > 80){
 
     text =
-    "Trade networks flourishing between major factions.";
+      "Trade systems flourishing between dominant factions.";
 
   }
 
   else{
 
     text =
-    "Civilization patterns stabilizing.";
+      "Civilization patterns stabilizing.";
 
   }
 
@@ -474,14 +475,16 @@ async function loadWorld(){
 
 }
 
-/* LOAD FACTIONS */
+/* FACTIONS */
 
 async function loadFactions(){
 
   territoryLayer.clearLayers();
 
   const response =
-    await fetch('./factions.json');
+    await fetch(
+      './factions.json?t=' + Date.now()
+    );
 
   const factions =
     await response.json();
@@ -518,21 +521,29 @@ async function loadFactions(){
 
 }
 
-/* CREATE PULSE */
+/* EVENT PULSE */
 
 function createPulse(item,color){
 
+  const severity =
+    item.severity || 5;
+
+  const lifespan =
+    item.lifespan || 120;
+
+  const createdAt =
+    item.createdAt || Date.now();
+
   const size =
-    item.severity * 1.8;
+    severity * 1.8;
 
   const age =
-    (Date.now() -
-    item.createdAt) / 1000;
+    (Date.now() - createdAt) / 1000;
 
   const opacity =
     Math.max(
       0.15,
-      1 - age / item.lifespan
+      1 - age / lifespan
     );
 
   const marker =
@@ -558,7 +569,7 @@ function createPulse(item,color){
 
     if(growing){
 
-      radius += .5;
+      radius += .4;
 
       if(radius > size + 6){
 
@@ -570,7 +581,7 @@ function createPulse(item,color){
 
     else{
 
-      radius -= .5;
+      radius -= .4;
 
       if(radius < size){
 
@@ -586,14 +597,16 @@ function createPulse(item,color){
 
 }
 
-/* LOAD HISTORY */
+/* HISTORY */
 
 async function loadHistory(){
 
   eventLayer.clearLayers();
 
   const response =
-    await fetch('./history.json');
+    await fetch(
+      './history.json?t=' + Date.now()
+    );
 
   const data =
     await response.json();
@@ -638,6 +651,8 @@ async function loadHistory(){
 
     }
 
+    /* CREATE EVENT */
+
     createPulse(item,color);
 
     /* FEED CARD */
@@ -649,17 +664,17 @@ async function loadHistory(){
 
     div.innerHTML = `
       <div class="event-type ${typeClass}">
-        ${item.type}
+        ${item.type || "unknown"}
       </div>
 
       <div class="event-text">
-        ${item.event}
+        ${item.event || "No description"}
       </div>
 
       <div class="event-meta">
-        ${item.faction}
-        • Severity ${item.severity}
-        • ${item.timestamp}
+        ${item.faction || "Unknown"}
+        • Severity ${item.severity || 5}
+        • ${item.timestamp || ""}
       </div>
     `;
 
@@ -690,4 +705,4 @@ setInterval(init,15000);
 </script>
 
 </body>
-  </html>
+</html>
