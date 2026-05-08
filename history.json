@@ -138,5 +138,19 @@
     "timestamp": "6:57:43 PM",
     "createdAt": 1778266663414,
     "id": 10
+  },
+  {
+    "x": 70,
+    "y": 80,
+    "event": "A sudden solar flare cripples the Helios Directorate's research facilities, putting their cutting-edge science projects in jeopardy and straining relationships with Sol Union, who had been providing crucial technological expertise.",
+    "type": "disaster",
+    "severity": 4,
+    "faction": "Helios Directorate",
+    "radius": 30,
+    "impact": 70,
+    "lifespan": 360,
+    "timestamp": "8:06:10 PM",
+    "createdAt": 1778270770456,
+    "id": 11
   }
 ]
