@@ -12,5 +12,12 @@
     "event": "A rival city-state of Azura's forms a secret alliance with the north's warring tribes against a common threat.",
     "type": "war",
     "timestamp": "8:33:24 AM"
+  },
+  {
+    "x": 42,
+    "y": 75,
+    "event": "Scientists from the city-state of Elyria successfully harvest a valuable resource deposit at the grid's south-east corner.",
+    "type": "discovery",
+    "timestamp": "8:47:30 AM"
   }
 ]
