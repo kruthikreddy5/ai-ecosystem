@@ -26,5 +26,19 @@
     "timestamp": "9:48:46 AM",
     "createdAt": 1778233726491,
     "id": 2
+  },
+  {
+    "x": 25,
+    "y": 45,
+    "event": "As the conflict between Helios Directorate and Northern Accord rages on, Sol Union offers a surprise trade agreement, sending a delegation to Helios Directorate's eastern border,",
+    "type": "trade",
+    "severity": 2,
+    "faction": "Sol Union",
+    "radius": 20,
+    "impact": 40,
+    "lifespan": 480,
+    "timestamp": "9:55:30 AM",
+    "createdAt": 1778234130910,
+    "id": 3
   }
 ]
