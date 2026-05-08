@@ -96,5 +96,19 @@
     "timestamp": "2:53:37 PM",
     "createdAt": 1778252017061,
     "id": 7
+  },
+  {
+    "x": 55,
+    "y": 20,
+    "event": "In a desperate bid to reclaim its lost territories, Sol Union launches a series of daring raids against the Helios Directorate's western borders, drawing the Directorate into a costly and bitter guerrilla war.",
+    "type": "war",
+    "severity": 3,
+    "faction": "Sol Union",
+    "radius": 50,
+    "impact": 75,
+    "lifespan": 360,
+    "timestamp": "4:09:27 PM",
+    "createdAt": 1778256567234,
+    "id": 8
   }
 ]
