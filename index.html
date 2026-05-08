@@ -1,40 +1,197 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>AI World Map</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Arena | Observation Deck</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        body { background: #0a0a0a; color: #00ff41; font-family: monospace; margin: 0; }
-        #map { height: 70vh; background: #111; border-bottom: 2px wavy #00ff41; }
-        #summary { padding: 20px; height: 30vh; overflow-y: auto; background: #050505; }
-        .log-entry { border-left: 2px solid #00ff41; padding-left: 10px; margin-bottom: 10px; font-size: 0.9rem; }
+        :root {
+            --neon-green: #00ff41;
+            --dark-void: #0a0a0a;
+            --grid-line: rgba(0, 255, 65, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--dark-void);
+            color: var(--neon-green);
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Scanline Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2000;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        header {
+            padding: 15px;
+            border-bottom: 2px wavy var(--neon-green);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #000;
+        }
+
+        h1 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
+
+        #main-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            flex-grow: 1;
+            height: calc(100vh - 60px);
+        }
+
+        #map {
+            background: #050505;
+            border-right: 1px solid var(--neon-green);
+        }
+
+        #side-panel {
+            display: flex;
+            flex-direction: column;
+            background: #000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .panel-section { margin-bottom: 25px; }
+
+        h3 {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-decoration: underline;
+            text-underline-offset: 5px;
+        }
+
+        #summary-text {
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: #fff;
+            background: rgba(0, 255, 65, 0.05);
+            padding: 10px;
+            border: 1px dashed var(--neon-green);
+        }
+
+        .log-entry {
+            font-size: 0.8rem;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--grid-line);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .log-time { color: #888; margin-right: 8px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+
+        /* Customizing Leaflet Tooltips/Popups */
+        .leaflet-popup-content-wrapper { background: #000; color: var(--neon-green); border: 1px solid var(--neon-green); border-radius: 0; }
+        .leaflet-popup-tip { background: var(--neon-green); }
     </style>
 </head>
 <body>
-    <div id="map"></div>
-    <div id="summary"><h3>World Timeline</h3><div id="logs"></div></div>
+
+    <header>
+        <h1>[ KRUTHIK_ARENA_v2.0 ]</h1>
+        <div id="status">STATUS: LINK_ESTABLISHED</div>
+    </header>
+
+    <div id="main-container">
+        <div id="map"></div>
+        
+        <div id="side-panel">
+            <div class="panel-section">
+                <h3>WORLD_SUMMARY</h3>
+                <div id="summary-text">Analyzing data streams...</div>
+            </div>
+
+            <div class="panel-section" style="flex-grow: 1;">
+                <h3>EVENT_LOGS</h3>
+                <div id="logs"></div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        const map = L.map('map', { crs: L.CRS.Simple, minZoom: -1 });
-        const bounds = [[0,0], [100,100]];
+        // Set up coordinates (Simple 100x100 Grid)
+        const map = L.map('map', {
+            crs: L.CRS.Simple,
+            minZoom: -1,
+            maxZoom: 2,
+            zoomControl: false
+        });
+
+        const bounds = [[0, 0], [100, 100]];
         map.fitBounds(bounds);
 
-        async function updateMap() {
-            const res = await fetch('history.json');
-            const data = await res.json();
-            const logs = document.getElementById('logs');
-            logs.innerHTML = '';
-
-            data.forEach(point => {
-                L.circleMarker([point.y, point.x], { color: '#00ff41', radius: 5 }).addTo(map)
-                    .bindPopup(point.event);
+        async function updateDashboard() {
+            try {
+                const res = await fetch('./history.json?t=' + Date.now());
+                const data = await res.json();
                 
-                logs.innerHTML = `<div class="log-entry"><b>${point.timestamp}</b>: ${point.event}</div>` + logs.innerHTML;
-            });
+                if (data.length === 0) return;
+
+                // Clear existing markers
+                map.eachLayer((layer) => { if (layer instanceof L.CircleMarker) map.removeLayer(layer); });
+
+                const logsContainer = document.getElementById('logs');
+                logsContainer.innerHTML = '';
+
+                // Populate Map and Logs
+                data.slice().reverse().forEach((p, index) => {
+                    // Add Marker
+                    const marker = L.circleMarker([p.y, p.x], {
+                        color: var(--neon-green),
+                        fillColor: var(--neon-green),
+                        fillOpacity: index === 0 ? 0.8 : 0.3,
+                        radius: index === 0 ? 8 : 4
+                    }).addTo(map);
+                    
+                    marker.bindPopup(`<b>COORD: ${p.x}, ${p.y}</b><br>${p.event}`);
+
+                    // Add Log
+                    const entry = document.createElement('div');
+                    entry.className = 'log-entry';
+                    entry.innerHTML = `<span class="log-time">[${p.timestamp || '00:00'}]</span> ${p.event}`;
+                    logsContainer.appendChild(entry);
+                });
+
+                // Generate Summary (Basic logic based on history length)
+                const summary = document.getElementById('summary-text');
+                const lastEvent = data[data.length - 1];
+                summary.innerHTML = `World complexity at level ${data.length}. Latest anomaly detected at sector ${lastEvent.x}:${lastEvent.y}. Current status: ACTIVE_EVOLUTION.`;
+
+                // Auto-zoom to latest event
+                if (data.length > 0) {
+                    const latest = data[data.length - 1];
+                    map.panTo([latest.y, latest.x]);
+                }
+
+            } catch (e) {
+                console.error("Dashboard Sync Failed", e);
+            }
         }
-        updateMap();
-        setInterval(updateMap, 60000);
+
+        // Run on load and every 60 seconds
+        updateDashboard();
+        setInterval(updateDashboard, 60000);
+
+        // Fix Leaflet sizing bug
+        setTimeout(() => map.invalidateSize(), 500);
     </script>
 </body>
 </html>
