@@ -166,5 +166,19 @@
     "timestamp": "9:14:44 PM",
     "createdAt": 1778274884785,
     "id": 12
+  },
+  {
+    "x": 50,
+    "y": 75,
+    "event": "In a surprise move, the Sol Union attempts to solidify its position on the Helios Directorate’s northern borders, deploying a series of advanced defensive systems to counter potential future threats.",
+    "type": "science",
+    "faction": "Sol Union",
+    "severity": 2,
+    "radius": 20,
+    "impact": 65,
+    "lifespan": 360,
+    "timestamp": "10:12:03 PM",
+    "createdAt": 1778278323597,
+    "id": 13
   }
 ]
