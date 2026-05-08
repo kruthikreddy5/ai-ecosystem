@@ -19,5 +19,12 @@
     "event": "Scientists from the city-state of Elyria successfully harvest a valuable resource deposit at the grid's south-east corner.",
     "type": "discovery",
     "timestamp": "8:47:30 AM"
+  },
+  {
+    "x": 91,
+    "y": 22,
+    "event": "A devastating earthquake strikes the coastline of the city-state of Elyria, crippling its valuable resource infrastructure.",
+    "type": "disaster",
+    "timestamp": "9:07:34 AM"
   }
 ]
