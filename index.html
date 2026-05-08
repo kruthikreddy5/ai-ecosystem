@@ -1,201 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Arena | Observation Deck</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style>
-        :root {
-            --neon-green: #00ff41;
-            --dark-void: #0a0a0a;
-            --grid-line: rgba(0, 255, 65, 0.1);
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Arena Map</title>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 
-        body {
-            background-color: var(--dark-void);
-            color: var(--neon-green);
-            font-family: 'Courier New', monospace;
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-        /* Scanline Effect */
-        body::before {
-            content: " ";
-            display: block;
-            position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 2000;
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
-        }
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #0a0a0a;
+    color: #00ff41;
+    font-family: monospace;
+  }
 
-        header {
-            padding: 15px;
-            border-bottom: 2px wavy var(--neon-green);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #000;
-        }
+  body {
+    display: flex;
+    flex-direction: column;
+  }
 
-        h1 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
+  .header {
+    height: 50px;
+    border-bottom: 1px solid #00ff41;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: #050505;
+    flex-shrink: 0;
+  }
 
-        #main-container {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            flex-grow: 1;
-            height: calc(100vh - 60px);
-        }
+  .container {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
 
-        #map {
-            background: #050505;
-            border-right: 1px solid var(--neon-green);
-        }
+  /* MAP */
+  #map {
+    flex: 1;
+    height: 100%;
+    min-height: 400px;
+    background: #0a0a0a;
+  }
 
-        #side-panel {
-            display: flex;
-            flex-direction: column;
-            background: #000;
-            padding: 20px;
-            overflow-y: auto;
-        }
+  /* EVENT PANEL */
+  .panel {
+    width: 320px;
+    border-left: 1px solid #00ff41;
+    background: #050505;
+    overflow-y: auto;
+    padding: 12px;
+  }
 
-        .panel-section { margin-bottom: 25px; }
+  .panel h2 {
+    font-size: 14px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #00ff41;
+    padding-bottom: 8px;
+    letter-spacing: 1px;
+  }
 
-        h3 {
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-            text-decoration: underline;
-            text-underline-offset: 5px;
-        }
+  .log {
+    margin-bottom: 12px;
+    padding: 10px;
+    border: 1px solid rgba(0, 255, 65, 0.25);
+    background: rgba(0, 255, 65, 0.03);
+  }
 
-        #summary-text {
-            font-size: 0.85rem;
-            line-height: 1.4;
-            color: #fff;
-            background: rgba(0, 255, 65, 0.05);
-            padding: 10px;
-            border: 1px dashed var(--neon-green);
-        }
+  .log-type {
+    color: #00ff41;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
 
-        .log-entry {
-            font-size: 0.8rem;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--grid-line);
-            animation: fadeIn 0.5s ease-out;
-        }
+  .log-event {
+    color: #b7ffcb;
+    font-size: 13px;
+    line-height: 1.4;
+  }
 
-        .log-time { color: #888; margin-right: 8px; }
+  .log-meta {
+    margin-top: 6px;
+    font-size: 11px;
+    color: rgba(0,255,65,0.6);
+  }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+  /* LEAFLET CUSTOM */
+  .leaflet-container {
+    background: #0a0a0a !important;
+  }
 
-        /* Customizing Leaflet Tooltips/Popups */
-        .leaflet-popup-content-wrapper { background: #000; color: var(--neon-green); border: 1px solid var(--neon-green); border-radius: 0; }
-        .leaflet-popup-tip { background: var(--neon-green); }
-    </style>
+  .leaflet-popup-content-wrapper {
+    background: #050505;
+    color: #00ff41;
+    border: 1px solid #00ff41;
+    border-radius: 0;
+  }
+
+  .leaflet-popup-tip {
+    background: #00ff41;
+  }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    body {
+      overflow: auto;
+    }
+
+    .container {
+      flex-direction: column;
+      height: calc(100vh - 50px);
+    }
+
+    #map {
+      width: 100%;
+      height: 60vh !important;
+      min-height: 60vh;
+    }
+
+    .panel {
+      width: 100%;
+      height: 40vh;
+      border-left: none;
+      border-top: 1px solid #00ff41;
+    }
+  }
+</style>
 </head>
+
 <body>
 
-    <header>
-        <h1>[ KRUTHIK_ARENA_v2.0 ]</h1>
-        <div id="status">STATUS: LINK_ESTABLISHED</div>
-    </header>
+<div class="header">
+  AI WORLD ARENA // LIVE HISTORY FEED
+</div>
 
-    <div id="main-container">
-        <div id="map"></div>
-        
-        <div id="side-panel">
-            <div class="panel-section">
-                <h3>WORLD_SUMMARY</h3>
-                <div id="summary-text">Analyzing data streams...</div>
-            </div>
+<div class="container">
+  <div id="map"></div>
 
-            <div class="panel-section" style="flex-grow: 1;">
-                <h3>EVENT_LOGS</h3>
-                <div id="logs"></div>
-            </div>
+  <div class="panel">
+    <h2>EVENT LOGS</h2>
+    <div id="logs"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+  // =========================================
+  // MAP SETUP
+  // =========================================
+
+  const map = L.map('map', {
+    crs: L.CRS.Simple,
+    minZoom: -1,
+    maxZoom: 4,
+    zoomControl: true
+  });
+
+  const bounds = [[0, 0], [100, 100]];
+
+  // BLACK SCREEN FIX
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 300);
+  });
+
+  // VIEW
+  map.fitBounds(bounds);
+
+  // =========================================
+  // GRID GENERATION
+  // =========================================
+
+  // Horizontal lines
+  for (let y = 0; y <= 100; y += 10) {
+    L.polyline(
+      [[y, 0], [y, 100]],
+      {
+        color: 'rgba(0,255,65,0.15)',
+        weight: 1,
+        interactive: false
+      }
+    ).addTo(map);
+  }
+
+  // Vertical lines
+  for (let x = 0; x <= 100; x += 10) {
+    L.polyline(
+      [[0, x], [100, x]],
+      {
+        color: 'rgba(0,255,65,0.15)',
+        weight: 1,
+        interactive: false
+      }
+    ).addTo(map);
+  }
+
+  // Coordinate Labels
+  for (let i = 0; i <= 100; i += 10) {
+    L.marker([i, 0], {
+      interactive: false,
+      icon: L.divIcon({
+        className: 'coord-label',
+        html: `<div style="
+          color:#00ff41;
+          font-size:10px;
+          font-family:monospace;
+        ">${i}</div>`
+      })
+    }).addTo(map);
+  }
+
+  // =========================================
+  // MARKERS LAYER
+  // =========================================
+
+  const markersLayer = L.layerGroup().addTo(map);
+
+  // =========================================
+  // FETCH HISTORY.JSON
+  // =========================================
+
+  async function loadHistory() {
+    try {
+      const response = await fetch('./history.json');
+
+      if (!response.ok) {
+        throw new Error('Failed to load history.json');
+      }
+
+      const data = await response.json();
+
+      // Clear old markers
+      markersLayer.clearLayers();
+
+      // Clear logs
+      const logsContainer = document.getElementById('logs');
+      logsContainer.innerHTML = '';
+
+      data.forEach((item) => {
+
+        // VALIDATE
+        if (
+          typeof item.x !== 'number' ||
+          typeof item.y !== 'number'
+        ) return;
+
+        // CREATE MARKER
+        const marker = L.circleMarker(
+          [item.y, item.x],
+          {
+            radius: 6,
+            color: '#00ff41',
+            fillColor: '#00ff41',
+            fillOpacity: 0.85,
+            weight: 1
+          }
+        );
+
+        marker.bindPopup(`
+          <b>${item.type || 'event'}</b><br>
+          ${item.event || 'No event text'}<br><br>
+          <small>${item.timestamp || ''}</small>
+        `);
+
+        marker.addTo(markersLayer);
+
+        // CREATE EVENT LOG
+        const log = document.createElement('div');
+        log.className = 'log';
+
+        log.innerHTML = `
+          <div class="log-type">${item.type || 'EVENT'}</div>
+          <div class="log-event">${item.event || ''}</div>
+          <div class="log-meta">
+            X:${item.x} | Y:${item.y}
+            ${item.timestamp ? ' | ' + item.timestamp : ''}
+          </div>
+        `;
+
+        logsContainer.prepend(log);
+      });
+
+      // Refresh map rendering
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 100);
+
+    } catch (err) {
+      console.error(err);
+
+      document.getElementById('logs').innerHTML = `
+        <div class="log">
+          <div class="log-type">ERROR</div>
+          <div class="log-event">
+            Could not load history.json
+          </div>
         </div>
-    </div>
+      `;
+    }
+  }
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        // Set up coordinates (Simple 100x100 Grid)
-        const map = L.map('map', {
-            crs: L.CRS.Simple,
-            minZoom: -1,
-            maxZoom: 2,
-            zoomControl: false
-        });
+  // INITIAL LOAD
+  loadHistory();
 
-        const bounds = [[0, 0], [100, 100]];
-        map.fitBounds(bounds);
+  // AUTO REFRESH EVERY 15s
+  setInterval(loadHistory, 15000);
 
-        async function updateDashboard() {
-            try {
-                const res = await fetch('./history.json?t=' + Date.now());
-                const data = await res.json();
-                
-                if (data.length === 0) return;
+</script>
 
-                // Clear existing markers
-                map.eachLayer((layer) => { if (layer instanceof L.CircleMarker) map.removeLayer(layer); });
-
-                const logsContainer = document.getElementById('logs');
-                logsContainer.innerHTML = '';
-
-                // Populate Map and Logs
-                data.slice().reverse().forEach((p, index) => {
-                    // Add Marker
-                    const marker = L.circleMarker([p.y, p.x], {
-                        color: var(--neon-green),
-                        fillColor: var(--neon-green),
-                        fillOpacity: index === 0 ? 0.8 : 0.3,
-                        radius: index === 0 ? 8 : 4
-                    }).addTo(map);
-                    
-                    marker.bindPopup(`<b>COORD: ${p.x}, ${p.y}</b><br>${p.event}`);
-
-                    // Add Log
-                    const entry = document.createElement('div');
-                    entry.className = 'log-entry';
-                    entry.innerHTML = `<span class="log-time">[${p.timestamp || '00:00'}]</span> ${p.event}`;
-                    logsContainer.appendChild(entry);
-                });
-
-                // Generate Summary (Basic logic based on history length)
-                const summary = document.getElementById('summary-text');
-                const lastEvent = data[data.length - 1];
-                summary.innerHTML = `World complexity at level ${data.length}. Latest anomaly detected at sector ${lastEvent.x}:${lastEvent.y}. Current status: ACTIVE_EVOLUTION.`;
-
-                // Auto-zoom to latest event
-                if (data.length > 0) {
-                    const latest = data[data.length - 1];
-                    map.panTo([latest.y, latest.x]);
-                }
-
-            } catch (e) {
-                console.error("Dashboard Sync Failed", e);
-            }
-        }
-
-        // Run on load
-        updateDashboard();
-
-        // 1. THIS IS THE KEY FIX: Forces the map to "fill" the black void
-        setTimeout(() => {
-            map.invalidateSize();
-        }, 800); 
-
-        // 2. Refresh data every 60 seconds
-        setInterval(updateDashboard, 60000);
-    </script>
 </body>
 </html>
