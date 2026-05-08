@@ -54,5 +54,19 @@
     "timestamp": "10:03:22 AM",
     "createdAt": 1778234602140,
     "id": 4
+  },
+  {
+    "x": 70,
+    "y": 85,
+    "event": "A devastating sandstorm engulfs Sol Union's eastern territories, crippling their infrastructure and halting trade.",
+    "type": "disaster",
+    "severity": 4,
+    "faction": "Sol Union",
+    "radius": 30,
+    "impact": 40,
+    "lifespan": 180,
+    "timestamp": "11:44:09 AM",
+    "createdAt": 1778240649987,
+    "id": 5
   }
 ]
