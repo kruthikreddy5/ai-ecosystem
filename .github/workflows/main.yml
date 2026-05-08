@@ -19,11 +19,13 @@ jobs:
       - run: node index.js
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          
       - name: Save History
         run: |
           git config --global user.name 'AI World Bot'
           git config --global user.email 'bot@aiworld.com'
           git add history.md
-          git commit -m "The AI world developed further" || echo "No changes"
-          git push
+          git commit -m "AI Update: $(date)" || echo "No changes to commit"
+          git push origin main
           
+    
