@@ -10,5 +10,18 @@
     "impact": 75,
     "timestamp": "9:28:17 AM",
     "id": 1
+  },
+  {
+    "x": 30,
+    "y": 50,
+    "event": "The Helios Directorate launches a daring raid on an unguarded Solar Array owned by the Sol Union, crippling their energy production and further straining relations.",
+    "type": "war",
+    "severity": 9,
+    "faction": "Helios Directorate",
+    "radius": 20,
+    "impact": 80,
+    "timestamp": "9:39:03 AM",
+    "id": 2,
+    "createdAt": 1778233143401
   }
 ]
