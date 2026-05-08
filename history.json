@@ -180,5 +180,19 @@
     "timestamp": "10:12:03 PM",
     "createdAt": 1778278323597,
     "id": 13
+  },
+  {
+    "x": 60,
+    "y": 45,
+    "event": "Helios Directorate establishes a strategic partnership with Northern Accord to strengthen trade routes and counter the growing economic influence of Sol Union.",
+    "type": "politics",
+    "severity": 2,
+    "faction": "Helios Directorate",
+    "radius": 20,
+    "impact": 45,
+    "lifespan": 300,
+    "timestamp": "11:09:54 PM",
+    "createdAt": 1778281794170,
+    "id": 14
   }
 ]
