@@ -1,10 +1,8 @@
 name: AI World Heartbeat
-
 on:
+  workflow_dispatch:
   schedule:
-    - cron: '0 * * * *' # Wakes up every 1 hour
-  workflow_dispatch:      # Allows you to run it manually
-
+    - cron: '0 * * * *'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,20 +10,19 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install
+      - run: npm install @google/generative-ai
       - run: node index.js
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          
-      - name: Save History
+      - name: Commit and Push
         run: |
-          git config --global user.name 'AI World Bot'
-          git config --global user.email 'bot@aiworld.com'
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add history.md
           git commit -m "AI Update: $(date)" || echo "No changes to commit"
           git push origin main
-          
-    
