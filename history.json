@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "x": 50,
+    "y": 70,
+    "event": "Sol Union discovers a massive underground reserve of rare minerals in the vicinity of Helios Directorate, sparking tensions and a sudden surge in militarization.",
+    "type": "politics",
+    "severity": 8,
+    "faction": "Sol Union",
+    "radius": 15,
+    "impact": 75,
+    "timestamp": "9:28:17 AM",
+    "id": 1
+  }
+]
