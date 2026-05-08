@@ -1,10 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Vrindavan — Synthetic Earth</title>
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:Inter,system-ui,sans-serif;
+  background:#03060d;
+  color:white;
+}
+
+/* BACKGROUND */
+
+body{
+  background:
+    radial-gradient(circle at top,
+    #15253d 0%,
+    #09111d 35%,
+    #03060d 100%);
+}
+
+/* STARS */
+
+.stars{
+  position:fixed;
+  inset:0;
+  background-image:
+    radial-gradient(white .8px, transparent .8px);
+  background-size:140px 140px;
+  opacity:.07;
+  pointer-events:none;
+}
+
+/* SCANLINES */
+
+.scanlines{
+  position:fixed;
+  inset:0;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.01),
+      rgba(255,255,255,.01) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  pointer-events:none;
+  z-index:999;
+}
+
+/* APP */
+
+.app{
+  display:flex;
+  width:100%;
+  height:100vh;
+}
+
+/* MAP */
+
+#map{
+  flex:1;
+  height:100%;
+  background:#03060d;
+  position:relative;
+}
+
+/* ATMOSPHERE */
+
+.atmosphere{
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at center,
+    transparent 40%,
+    rgba(0,0,0,.6));
+  pointer-events:none;
+  z-index:500;
+}
+
+/* PANEL */
+
+.panel{
+  width:360px;
+  height:100%;
+  background:rgba(8,12,20,.88);
+  backdrop-filter:blur(20px);
+  border-left:1px solid rgba(255,255,255,.05);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+/* HEADER */
+
+.header{
+  padding:28px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.title{
+  font-size:30px;
+  font-weight:700;
+  letter-spacing:1px;
+}
+
+.subtitle{
+  margin-top:8px;
+  font-size:13px;
+  line-height:1.6;
+  color:rgba(255,255,255,.45);
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  padding:20px;
+}
+
+.stat{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.04);
+  border-radius:18px;
+  padding:16px;
+}
+
+.stat-label{
+  font-size:11px;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.4);
+  margin-bottom:8px;
+}
+
+.stat-value{
+  font-size:22px;
+  font-weight:700;
+}
+
+/* NARRATION */
+
+.narration{
+  margin:0 20px 20px;
+  padding:18px;
+  border-radius:18px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.04);
+  color:rgba(255,255,255,.72);
+  line-height:1.6;
+  font-size:14px;
+}
+
+/* FEED */
+
+.feed{
+  flex:1;
+  overflow-y:auto;
+  padding:20px;
+}
+
+.feed-title{
+  margin-bottom:14px;
+  font-size:12px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.4);
+}
+
+.event{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:14px;
+  animation:fade .5s ease;
+}
+
+@keyframes fade{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.event-type{
+  margin-bottom:10px;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.event-text{
+  font-size:14px;
+  line-height:1.6;
+  color:rgba(255,255,255,.85);
+}
+
+.event-meta{
+  margin-top:12px;
+  font-size:11px;
+  color:rgba(255,255,255,.35);
+}
+
+/* COLORS */
+
+.war{
+  color:#ff5a5a;
+}
+
+.trade{
+  color:#ffd166;
+}
+
+.science{
+  color:#7dd3fc;
+}
+
+.disaster{
+  color:#ff875f;
+}
+
+.politics{
+  color:#d4b5ff;
+}
+
+/* LEAFLET */
+
+.leaflet-container{
+  background:#03060d !important;
+}
+
+.leaflet-control-attribution{
+  display:none;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+  .app{
+    flex-direction:column;
+  }
+
+  #map{
+    width:100%;
+    height:60vh !important;
+    min-height:60vh;
+  }
+
+  .panel{
+    width:100%;
+    height:40vh;
+    border-left:none;
+    border-top:1px solid rgba(255,255,255,.05);
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="stars"></div>
+<div class="scanlines"></div>
+
+<div class="app">
+
+  <div id="map">
+    <div class="atmosphere"></div>
+  </div>
+
+  <div class="panel">
+
+    <div class="header">
+
+      <div class="title">
+        Vrindavan
+      </div>
+
+      <div class="subtitle">
+        Synthetic civilization observation layer.<br>
+        Monitoring geopolitical evolution in real time.
+      </div>
+
+    </div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="stat-label">Stability</div>
+        <div class="stat-value" id="stability">0%</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Economy</div>
+        <div class="stat-value" id="economy">0%</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Cycle</div>
+        <div class="stat-value" id="cycle">0</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Era</div>
+        <div class="stat-value" id="era">Unknown</div>
+      </div>
+
+    </div>
+
+    <div class="narration" id="narration">
+      Civilization patterns stabilizing.
+    </div>
+
+    <div class="feed">
+
+      <div class="feed-title">
+        World Feed
+      </div>
+
+      <div id="feed"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 
-/* =========================
-   MAP
-========================= */
+/* MAP */
 
 const map = L.map("map",{
   crs:L.CRS.Simple,
@@ -23,20 +376,18 @@ window.addEventListener("load",()=>{
 
   setTimeout(()=>{
     map.invalidateSize();
-  },600);
+  },500);
 
 });
 
-/* =========================
-   VISIBLE GRID
-========================= */
+/* GRID */
 
 for(let i=0;i<=100;i+=10){
 
   L.polyline(
     [[i,0],[i,100]],
     {
-      color:"rgba(255,255,255,.12)",
+      color:"rgba(255,255,255,.03)",
       weight:1,
       interactive:false
     }
@@ -45,7 +396,7 @@ for(let i=0;i<=100;i+=10){
   L.polyline(
     [[0,i],[100,i]],
     {
-      color:"rgba(255,255,255,.12)",
+      color:"rgba(255,255,255,.03)",
       weight:1,
       interactive:false
     }
@@ -53,9 +404,7 @@ for(let i=0;i<=100;i+=10){
 
 }
 
-/* =========================
-   LAYERS
-========================= */
+/* LAYERS */
 
 const territoryLayer =
   L.layerGroup().addTo(map);
@@ -63,59 +412,17 @@ const territoryLayer =
 const eventLayer =
   L.layerGroup().addTo(map);
 
-/* =========================
-   SAFE FETCH
-========================= */
-
-async function safeFetch(file){
-
-  try{
-
-    const response =
-      await fetch(
-        file + '?t=' + Date.now()
-      );
-
-    if(!response.ok){
-
-      throw new Error(
-        "Failed to load " + file
-      );
-
-    }
-
-    return await response.json();
-
-  }
-
-  catch(err){
-
-    console.error(err);
-
-    return null;
-
-  }
-
-}
-
-/* =========================
-   WORLD
-========================= */
+/* WORLD */
 
 async function loadWorld(){
 
+  const response =
+    await fetch(
+      './world.json?t=' + Date.now()
+    );
+
   const world =
-    await safeFetch("world.json");
-
-  if(!world){
-
-    console.log("No world data");
-
-    return;
-
-  }
-
-  console.log("WORLD:",world);
+    await response.json();
 
   document.getElementById(
     "stability"
@@ -141,17 +448,17 @@ async function loadWorld(){
 
   let text = "";
 
-  if((world.stability || 0) < 40){
+  if(world.stability < 40){
 
     text =
-      "Global instability rising across multiple regions.";
+      "Global instability increasing across multiple regions.";
 
   }
 
-  else if((world.economy || 0) > 80){
+  else if(world.economy > 80){
 
     text =
-      "Trade systems flourishing between major factions.";
+      "Trade systems flourishing between dominant factions.";
 
   }
 
@@ -168,50 +475,31 @@ async function loadWorld(){
 
 }
 
-/* =========================
-   FACTIONS
-========================= */
+/* FACTIONS */
 
 async function loadFactions(){
 
   territoryLayer.clearLayers();
 
+  const response =
+    await fetch(
+      './factions.json?t=' + Date.now()
+    );
+
   const factions =
-    await safeFetch("factions.json");
-
-  if(!factions){
-
-    console.log("No faction data");
-
-    return;
-
-  }
-
-  console.log("FACTIONS:",factions);
+    await response.json();
 
   factions.forEach(f=>{
-
-    const color =
-      f.color || "#7dd3fc";
-
-    const aggression =
-      f.aggression || 5;
-
-    const x =
-      f.x || 50;
-
-    const y =
-      f.y || 50;
 
     /* TERRITORY */
 
     L.circle(
-      [y,x],
+      [f.y,f.x],
       {
-        radius:aggression * 90000,
-        color:color,
-        fillColor:color,
-        fillOpacity:.10,
+        radius:f.aggression * 80000,
+        color:f.color,
+        fillColor:f.color,
+        fillOpacity:.08,
         weight:1
       }
     ).addTo(territoryLayer);
@@ -219,11 +507,11 @@ async function loadFactions(){
     /* CENTER */
 
     L.circleMarker(
-      [y,x],
+      [f.y,f.x],
       {
-        radius:7,
-        color:color,
-        fillColor:color,
+        radius:6,
+        color:f.color,
+        fillColor:f.color,
         fillOpacity:1,
         weight:2
       }
@@ -233,125 +521,95 @@ async function loadFactions(){
 
 }
 
-/* =========================
-   EVENT PULSE
-========================= */
+/* EVENT PULSE */
 
 function createPulse(item,color){
 
-  try{
+  const severity =
+    item.severity || 5;
 
-    const x =
-      Number(item.x) || 50;
+  const lifespan =
+    item.lifespan || 120;
 
-    const y =
-      Number(item.y) || 50;
+  const createdAt =
+    item.createdAt || Date.now();
 
-    const severity =
-      Number(item.severity) || 5;
+  const size =
+    severity * 1.8;
 
-    const lifespan =
-      Number(item.lifespan) || 120;
+  const age =
+    (Date.now() - createdAt) / 1000;
 
-    const createdAt =
-      Number(item.createdAt) || Date.now();
-
-    const size =
-      severity * 1.8;
-
-    const age =
-      (Date.now() - createdAt) / 1000;
-
-    const opacity =
-      Math.max(
-        0.2,
-        1 - age / lifespan
-      );
-
-    const marker =
-      L.circleMarker(
-        [y,x],
-        {
-          radius:size,
-          color:color,
-          fillColor:color,
-          fillOpacity:opacity,
-          opacity:opacity,
-          weight:1
-        }
-      );
-
-    marker.addTo(eventLayer);
-
-    /* ANIMATION */
-
-    let growing = true;
-
-    let radius = size;
-
-    setInterval(()=>{
-
-      if(growing){
-
-        radius += .4;
-
-        if(radius > size + 6){
-
-          growing = false;
-
-        }
-
-      }
-
-      else{
-
-        radius -= .4;
-
-        if(radius < size){
-
-          growing = true;
-
-        }
-
-      }
-
-      marker.setRadius(radius);
-
-    },90);
-
-  }
-
-  catch(err){
-
-    console.error(
-      "Pulse error:",
-      err
+  const opacity =
+    Math.max(
+      0.15,
+      1 - age / lifespan
     );
 
-  }
+  const marker =
+    L.circleMarker(
+      [item.y,item.x],
+      {
+        radius:size,
+        color:color,
+        fillColor:color,
+        fillOpacity:opacity,
+        opacity:opacity,
+        weight:1
+      }
+    );
+
+  marker.addTo(eventLayer);
+
+  let growing = true;
+
+  let radius = size;
+
+  setInterval(()=>{
+
+    if(growing){
+
+      radius += .4;
+
+      if(radius > size + 6){
+
+        growing = false;
+
+      }
+
+    }
+
+    else{
+
+      radius -= .4;
+
+      if(radius < size){
+
+        growing = true;
+
+      }
+
+    }
+
+    marker.setRadius(radius);
+
+  },90);
 
 }
 
-/* =========================
-   HISTORY
-========================= */
+/* HISTORY */
 
 async function loadHistory(){
 
   eventLayer.clearLayers();
 
+  const response =
+    await fetch(
+      './history.json?t=' + Date.now()
+    );
+
   const data =
-    await safeFetch("history.json");
-
-  if(!data){
-
-    console.log("No history data");
-
-    return;
-
-  }
-
-  console.log("HISTORY:",data);
+    await response.json();
 
   const feed =
     document.getElementById(
@@ -360,92 +618,75 @@ async function loadHistory(){
 
   feed.innerHTML = "";
 
-  [...data].reverse().forEach(item=>{
+  data.reverse().forEach(item=>{
 
-    try{
+    let color = "#ffffff";
+    let typeClass = "";
 
-      let color = "#ffffff";
-      let typeClass = "";
+    switch(item.type){
 
-      switch(item.type){
+      case "war":
+        color = "#ff5a5a";
+        typeClass = "war";
+        break;
 
-        case "war":
-          color = "#ff5a5a";
-          typeClass = "war";
-          break;
+      case "trade":
+        color = "#ffd166";
+        typeClass = "trade";
+        break;
 
-        case "trade":
-          color = "#ffd166";
-          typeClass = "trade";
-          break;
+      case "science":
+        color = "#7dd3fc";
+        typeClass = "science";
+        break;
 
-        case "science":
-          color = "#7dd3fc";
-          typeClass = "science";
-          break;
+      case "disaster":
+        color = "#ff875f";
+        typeClass = "disaster";
+        break;
 
-        case "disaster":
-          color = "#ff875f";
-          typeClass = "disaster";
-          break;
-
-        default:
-          color = "#d4b5ff";
-          typeClass = "politics";
-
-      }
-
-      /* MAP EVENT */
-
-      createPulse(item,color);
-
-      /* FEED */
-
-      const div =
-        document.createElement("div");
-
-      div.className = "event";
-
-      div.innerHTML = `
-        <div class="event-type ${typeClass}">
-          ${item.type || "unknown"}
-        </div>
-
-        <div class="event-text">
-          ${item.event || "No description"}
-        </div>
-
-        <div class="event-meta">
-          ${item.faction || "Unknown"}
-          • Severity ${item.severity || 5}
-          • ${item.timestamp || ""}
-        </div>
-      `;
-
-      feed.prepend(div);
+      default:
+        color = "#d4b5ff";
+        typeClass = "politics";
 
     }
 
-    catch(err){
+    /* CREATE EVENT */
 
-      console.error(
-        "History item failed:",
-        err
-      );
+    createPulse(item,color);
 
-    }
+    /* FEED CARD */
+
+    const div =
+      document.createElement("div");
+
+    div.className = "event";
+
+    div.innerHTML = `
+      <div class="event-type ${typeClass}">
+        ${item.type || "unknown"}
+      </div>
+
+      <div class="event-text">
+        ${item.event || "No description"}
+      </div>
+
+      <div class="event-meta">
+        ${item.faction || "Unknown"}
+        • Severity ${item.severity || 5}
+        • ${item.timestamp || ""}
+      </div>
+    `;
+
+    feed.prepend(div);
 
   });
 
 }
 
-/* =========================
-   INIT
-========================= */
+/* INIT */
 
 async function init(){
-
-  console.log("Vrindavan loading...");
 
   await loadWorld();
 
@@ -453,16 +694,15 @@ async function init(){
 
   await loadHistory();
 
-  console.log("Vrindavan ready.");
-
 }
 
 init();
 
-/* =========================
-   AUTO REFRESH
-========================= */
+/* AUTO REFRESH */
 
 setInterval(init,15000);
 
-  </script>
+</script>
+
+</body>
+</html>
