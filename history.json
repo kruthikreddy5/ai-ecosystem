@@ -40,5 +40,19 @@
     "timestamp": "9:55:30 AM",
     "createdAt": 1778234130910,
     "id": 3
+  },
+  {
+    "x": 22,
+    "y": 35,
+    "event": "Helios Directorate reinforces its eastern border with a massive mobilization, sparking a propaganda war against Sol Union's trade agreement and Northern Accord's neutrality.",
+    "type": "politics",
+    "severity": 3,
+    "faction": "Helios Directorate",
+    "radius": 50,
+    "impact": 60,
+    "lifespan": 300,
+    "timestamp": "10:03:22 AM",
+    "createdAt": 1778234602140,
+    "id": 4
   }
 ]
