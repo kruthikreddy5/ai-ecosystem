@@ -186,12 +186,16 @@
             }
         }
 
-        // Run on load and every 60 seconds
+        // Run on load
         updateDashboard();
-        setInterval(updateDashboard, 60000);
 
-        // Fix Leaflet sizing bug
-        setTimeout(() => map.invalidateSize(), 500);
+        // 1. THIS IS THE KEY FIX: Forces the map to "fill" the black void
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 800); 
+
+        // 2. Refresh data every 60 seconds
+        setInterval(updateDashboard, 60000);
     </script>
 </body>
 </html>
