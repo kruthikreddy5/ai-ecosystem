@@ -4,13 +4,15 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 async function run() {
   const historyFile = "history.json";
-  let history = fs.existsSync(historyFile) ? JSON.parse(fs.readFileSync(historyFile)) : [];
+  // Create file if it doesn't exist
+  if (!fs.existsSync(historyFile)) fs.writeFileSync(historyFile, "[]");
+  
+  let history = JSON.parse(fs.readFileSync(historyFile, "utf8"));
 
   const prompt = `You are a world-building engine. 
-  Current History: ${JSON.stringify(history.slice(-3))}
-  Generate a new event in a coordinates-based world (Map size 100x100).
-  Output ONLY a JSON object like this:
-  { "x": 45, "y": 62, "event": "Agent Kruthik discovered a glowing monolith.", "type": "discovery" }`;
+  Recent History: ${JSON.stringify(history.slice(-5))}
+  Generate ONE new event on a 100x100 grid.
+  Return ONLY a JSON object: {"x": 0-100, "y": 0-100, "event": "one sentence", "type": "war/peace/discovery/tech"}`;
 
   try {
     const chat = await groq.chat.completions.create({
@@ -24,7 +26,7 @@ async function run() {
     history.push(newEvent);
 
     fs.writeFileSync(historyFile, JSON.stringify(history, null, 2));
-    console.log("New world event added at:", newEvent.x, newEvent.y);
+    console.log("SUCCESS: Added event at", newEvent.x, newEvent.y);
   } catch (err) {
     console.error("GROQ ERROR:", err.message);
     process.exit(1);
