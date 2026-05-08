@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "x": 35,
+    "y": 20,
+    "event": "Helios Directorate launches a surprise attack on Northern Accord's eastern territories, sparking the Helios-Northern Conflict.",
+    "type": "war",
+    "severity": 4,
+    "faction": "Helios Directorate",
+    "radius": 50,
+    "impact": 25,
+    "lifespan": 240,
+    "timestamp": "9:47:56 AM",
+    "createdAt": 1778233676281,
+    "id": 1
+  }
+]
