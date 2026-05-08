@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "AI Civilization Simulation",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "node index.js"
   },
