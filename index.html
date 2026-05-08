@@ -1,34 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI World Observer</title>
+    <title>AI World Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        body { background: #0f0f0f; color: #00ff41; font-family: monospace; padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: auto; }
-        h1 { border-bottom: 2px wavy #00ff41; padding-bottom: 10px; }
-        .event { background: #1a1a1a; padding: 15px; margin-bottom: 10px; border-radius: 5px; border-left: 3px solid #00ff41; }
-        .time { color: #888; font-size: 0.8rem; }
+        body { background: #0a0a0a; color: #00ff41; font-family: monospace; margin: 0; }
+        #map { height: 70vh; background: #111; border-bottom: 2px wavy #00ff41; }
+        #summary { padding: 20px; height: 30vh; overflow-y: auto; background: #050505; }
+        .log-entry { border-left: 2px solid #00ff41; padding-left: 10px; margin-bottom: 10px; font-size: 0.9rem; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Kruthik's AI World: Observation Deck</h1>
-        <div id="logs">Loading logs from the void...</div>
-    </div>
+    <div id="map"></div>
+    <div id="summary"><h3>World Timeline</h3><div id="logs"></div></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        async function loadHistory() {
-            // This fetches your history.md file directly from GitHub
-            const response = await fetch('history.md');
-            const text = await response.text();
-            // Converts Markdown to HTML
-            document.getElementById('logs').innerHTML = marked.parse(text);
+        const map = L.map('map', { crs: L.CRS.Simple, minZoom: -1 });
+        const bounds = [[0,0], [100,100]];
+        map.fitBounds(bounds);
+
+        async function updateMap() {
+            const res = await fetch('history.json');
+            const data = await res.json();
+            const logs = document.getElementById('logs');
+            logs.innerHTML = '';
+
+            data.forEach(point => {
+                L.circleMarker([point.y, point.x], { color: '#00ff41', radius: 5 }).addTo(map)
+                    .bindPopup(point.event);
+                
+                logs.innerHTML = `<div class="log-entry"><b>${point.timestamp}</b>: ${point.event}</div>` + logs.innerHTML;
+            });
         }
-        loadHistory();
-        setInterval(loadHistory, 60000); // Refreshes every minute
+        updateMap();
+        setInterval(updateMap, 60000);
     </script>
 </body>
 </html>
