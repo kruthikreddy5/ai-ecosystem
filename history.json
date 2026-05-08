@@ -110,5 +110,19 @@
     "timestamp": "4:09:27 PM",
     "createdAt": 1778256567234,
     "id": 8
+  },
+  {
+    "x": 25,
+    "y": 60,
+    "event": "In a shocking twist, Sol Union's diplomatic efforts pay off as the Helios Directorate agrees to a tentative cease-fire in the Helios-Northern Conflict, paving the way for a historic peace treaty and potentially ending the brutal three-month-long war.",
+    "type": "politics",
+    "severity": 1,
+    "faction": "Sol Union",
+    "radius": 30,
+    "impact": 80,
+    "lifespan": 240,
+    "timestamp": "5:43:21 PM",
+    "createdAt": 1778262201322,
+    "id": 9
   }
 ]
