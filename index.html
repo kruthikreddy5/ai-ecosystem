@@ -4,11 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Vrindavan — World Engine</title>
+<title>Vrindavan — Synthetic Earth</title>
 
 <link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
 
 <style>
@@ -23,41 +23,51 @@ html,body{
   width:100%;
   height:100%;
   overflow:hidden;
-  background:#05070d;
+  background:#02050b;
   font-family:Inter,system-ui,sans-serif;
   color:white;
 }
 
 /* BACKGROUND */
 
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
+body{
   background:
-    radial-gradient(circle at top,#132238 0%,#05070d 60%),
-    linear-gradient(to bottom,#08111f,#05070d);
-  z-index:-3;
+    radial-gradient(circle at top,
+    #122033 0%,
+    #050914 45%,
+    #010203 100%);
 }
 
-body::after{
-  content:"";
+/* STARS */
+
+.stars{
+  position:fixed;
+  inset:0;
+  background-image:
+    radial-gradient(white .8px, transparent .8px);
+  background-size:120px 120px;
+  opacity:.08;
+  pointer-events:none;
+}
+
+/* GRID OVERLAY */
+
+.scanlines{
   position:fixed;
   inset:0;
   background:
     repeating-linear-gradient(
       to bottom,
-      rgba(255,255,255,0.02),
-      rgba(255,255,255,0.02) 1px,
+      rgba(255,255,255,.015),
+      rgba(255,255,255,.015) 1px,
       transparent 1px,
-      transparent 3px
+      transparent 4px
     );
-  opacity:.15;
   pointer-events:none;
-  z-index:-1;
+  z-index:999;
 }
 
-/* MAIN */
+/* APP */
 
 .app{
   display:flex;
@@ -70,18 +80,31 @@ body::after{
 #map{
   flex:1;
   height:100%;
-  background:#05070d;
   position:relative;
+  background:#050914;
 }
 
-/* PANEL */
+/* ATMOSPHERE */
+
+.atmosphere{
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at center,
+    transparent 45%,
+    rgba(0,0,0,.55));
+  pointer-events:none;
+  z-index:500;
+}
+
+/* RIGHT PANEL */
 
 .panel{
-  width:350px;
+  width:360px;
   height:100%;
-  background:rgba(5,10,18,0.88);
-  backdrop-filter:blur(18px);
-  border-left:1px solid rgba(255,255,255,.08);
+  background:rgba(7,12,20,.88);
+  backdrop-filter:blur(24px);
+  border-left:1px solid rgba(255,255,255,.05);
   display:flex;
   flex-direction:column;
   overflow:hidden;
@@ -90,48 +113,62 @@ body::after{
 /* HEADER */
 
 .header{
-  padding:22px;
+  padding:28px;
   border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 .title{
-  font-size:26px;
+  font-size:30px;
   font-weight:700;
   letter-spacing:1px;
 }
 
 .subtitle{
-  margin-top:6px;
-  color:rgba(255,255,255,.5);
+  margin-top:8px;
+  color:rgba(255,255,255,.45);
   font-size:13px;
+  line-height:1.5;
 }
 
-/* STATUS */
+/* STATS */
 
 .stats{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:12px;
+  gap:14px;
   padding:20px;
 }
 
 .stat{
   background:rgba(255,255,255,.03);
   border:1px solid rgba(255,255,255,.05);
-  border-radius:18px;
-  padding:14px;
+  border-radius:20px;
+  padding:16px;
 }
 
 .stat-label{
   font-size:11px;
-  color:rgba(255,255,255,.45);
-  margin-bottom:6px;
   text-transform:uppercase;
+  color:rgba(255,255,255,.4);
+  margin-bottom:8px;
 }
 
 .stat-value{
-  font-size:20px;
+  font-size:24px;
   font-weight:700;
+}
+
+/* NARRATION */
+
+.narration{
+  margin:0 20px 20px;
+  padding:18px;
+  border-radius:20px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.04);
+  color:rgba(255,255,255,.7);
+  line-height:1.6;
+  font-size:14px;
 }
 
 /* FEED */
@@ -139,22 +176,22 @@ body::after{
 .feed{
   flex:1;
   overflow-y:auto;
-  padding:18px;
+  padding:20px;
 }
 
 .feed-title{
+  color:rgba(255,255,255,.4);
   margin-bottom:14px;
-  font-size:14px;
-  color:rgba(255,255,255,.5);
-  letter-spacing:1px;
   text-transform:uppercase;
+  font-size:12px;
+  letter-spacing:1px;
 }
 
 .event{
   background:rgba(255,255,255,.03);
   border:1px solid rgba(255,255,255,.05);
-  border-radius:18px;
-  padding:16px;
+  border-radius:20px;
+  padding:18px;
   margin-bottom:14px;
   animation:fade .5s ease;
 }
@@ -172,27 +209,27 @@ body::after{
 
 .event-type{
   font-size:11px;
-  letter-spacing:1px;
   text-transform:uppercase;
-  margin-bottom:8px;
+  letter-spacing:1px;
+  margin-bottom:10px;
 }
 
 .event-text{
   font-size:14px;
-  line-height:1.5;
+  line-height:1.6;
   color:rgba(255,255,255,.85);
 }
 
 .event-meta{
   margin-top:12px;
   font-size:11px;
-  color:rgba(255,255,255,.4);
+  color:rgba(255,255,255,.35);
 }
 
-/* TYPE COLORS */
+/* COLORS */
 
 .war{
-  color:#ff4d4d;
+  color:#ff5a5a;
 }
 
 .trade{
@@ -204,7 +241,7 @@ body::after{
 }
 
 .disaster{
-  color:#ff7b54;
+  color:#ff875f;
 }
 
 .politics{
@@ -214,24 +251,11 @@ body::after{
 /* LEAFLET */
 
 .leaflet-container{
-  background:#05070d !important;
+  background:#050914 !important;
 }
 
 .leaflet-control-attribution{
   display:none;
-}
-
-/* ATMOSPHERE */
-
-.atmosphere{
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(circle at center,
-    transparent 40%,
-    rgba(0,0,0,.45));
-  pointer-events:none;
-  z-index:400;
 }
 
 /* MOBILE */
@@ -252,7 +276,7 @@ body::after{
     width:100%;
     height:40vh;
     border-left:none;
-    border-top:1px solid rgba(255,255,255,.08);
+    border-top:1px solid rgba(255,255,255,.06);
   }
 
 }
@@ -261,6 +285,9 @@ body::after{
 </head>
 
 <body>
+
+<div class="stars"></div>
+<div class="scanlines"></div>
 
 <div class="app">
 
@@ -271,39 +298,56 @@ body::after{
   <div class="panel">
 
     <div class="header">
-      <div class="title">Vrindavan</div>
-      <div class="subtitle">
-        Synthetic Civilization Observation Layer
+
+      <div class="title">
+        Vrindavan
       </div>
+
+      <div class="subtitle">
+        Synthetic civilization observation layer.<br>
+        Monitoring geopolitical evolution in real time.
+      </div>
+
     </div>
 
     <div class="stats">
 
       <div class="stat">
-        <div class="stat-label">Conflicts</div>
-        <div class="stat-value" id="conflicts">0</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Events</div>
-        <div class="stat-value" id="events">0</div>
-      </div>
-
-      <div class="stat">
         <div class="stat-label">Stability</div>
-        <div class="stat-value">72%</div>
+        <div class="stat-value" id="stability">0%</div>
       </div>
 
       <div class="stat">
-        <div class="stat-label">Dominant</div>
-        <div class="stat-value">Helios</div>
+        <div class="stat-label">Economy</div>
+        <div class="stat-value" id="economy">0%</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Cycle</div>
+        <div class="stat-value" id="cycle">0</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Era</div>
+        <div class="stat-value" id="era">
+          Emergence
+        </div>
       </div>
 
     </div>
 
+    <div class="narration" id="narration">
+      Civilization patterns stabilizing.
+    </div>
+
     <div class="feed">
-      <div class="feed-title">World Feed</div>
+
+      <div class="feed-title">
+        World Feed
+      </div>
+
       <div id="feed"></div>
+
     </div>
 
   </div>
@@ -324,9 +368,10 @@ const map = L.map("map",{
 });
 
 const bounds = [[0,0],[100,100]];
+
 map.fitBounds(bounds);
 
-/* FIX MOBILE BLACK SCREEN */
+/* FIX MOBILE */
 
 window.addEventListener("load",()=>{
 
@@ -343,7 +388,7 @@ for(let i=0;i<=100;i+=10){
   L.polyline(
     [[i,0],[i,100]],
     {
-      color:"rgba(255,255,255,.05)",
+      color:"rgba(255,255,255,.03)",
       weight:1,
       interactive:false
     }
@@ -352,7 +397,7 @@ for(let i=0;i<=100;i+=10){
   L.polyline(
     [[0,i],[100,i]],
     {
-      color:"rgba(255,255,255,.05)",
+      color:"rgba(255,255,255,.03)",
       weight:1,
       interactive:false
     }
@@ -360,167 +405,289 @@ for(let i=0;i<=100;i+=10){
 
 }
 
-/* MARKERS */
+/* LAYERS */
 
-const layer = L.layerGroup().addTo(map);
+const territoryLayer =
+  L.layerGroup().addTo(map);
+
+const eventLayer =
+  L.layerGroup().addTo(map);
+
+/* LOAD WORLD */
+
+async function loadWorld(){
+
+  const response =
+    await fetch('./world.json');
+
+  const world =
+    await response.json();
+
+  document.getElementById(
+    "stability"
+  ).innerText =
+    world.stability + "%";
+
+  document.getElementById(
+    "economy"
+  ).innerText =
+    world.economy + "%";
+
+  document.getElementById(
+    "cycle"
+  ).innerText =
+    world.cycle;
+
+  document.getElementById(
+    "era"
+  ).innerText =
+    world.era;
+
+  /* NARRATION */
+
+  let text = "";
+
+  if(world.stability < 40){
+
+    text =
+    "Global instability rising across multiple sectors.";
+
+  }
+
+  else if(world.economy > 80){
+
+    text =
+    "Trade networks flourishing between major factions.";
+
+  }
+
+  else{
+
+    text =
+    "Civilization patterns stabilizing.";
+
+  }
+
+  document.getElementById(
+    "narration"
+  ).innerText = text;
+
+}
+
+/* LOAD FACTIONS */
+
+async function loadFactions(){
+
+  territoryLayer.clearLayers();
+
+  const response =
+    await fetch('./factions.json');
+
+  const factions =
+    await response.json();
+
+  factions.forEach(f=>{
+
+    /* TERRITORY */
+
+    L.circle(
+      [f.y,f.x],
+      {
+        radius:f.aggression * 80000,
+        color:f.color,
+        fillColor:f.color,
+        fillOpacity:.08,
+        weight:1
+      }
+    ).addTo(territoryLayer);
+
+    /* CENTER */
+
+    L.circleMarker(
+      [f.y,f.x],
+      {
+        radius:6,
+        color:f.color,
+        fillColor:f.color,
+        fillOpacity:1,
+        weight:2
+      }
+    ).addTo(territoryLayer);
+
+  });
+
+}
 
 /* CREATE PULSE */
 
-function createPulse(y,x,color,size=12){
+function createPulse(item,color){
 
-  const marker = L.circleMarker([y,x],{
-    radius:size,
-    color:color,
-    fillColor:color,
-    fillOpacity:.2,
-    weight:1
-  });
+  const size =
+    item.severity * 1.8;
 
-  marker.addTo(layer);
+  const age =
+    (Date.now() -
+    item.createdAt) / 1000;
+
+  const opacity =
+    Math.max(
+      0.15,
+      1 - age / item.lifespan
+    );
+
+  const marker =
+    L.circleMarker(
+      [item.y,item.x],
+      {
+        radius:size,
+        color:color,
+        fillColor:color,
+        fillOpacity:opacity,
+        opacity:opacity,
+        weight:1
+      }
+    );
+
+  marker.addTo(eventLayer);
 
   let growing = true;
+
   let radius = size;
 
   setInterval(()=>{
 
     if(growing){
+
       radius += .5;
-      if(radius > size + 8){
+
+      if(radius > size + 6){
+
         growing = false;
+
       }
-    }else{
+
+    }
+
+    else{
+
       radius -= .5;
+
       if(radius < size){
+
         growing = true;
+
       }
+
     }
 
     marker.setRadius(radius);
 
-  },80);
+  },90);
 
-  return marker;
 }
 
-/* FETCH HISTORY */
+/* LOAD HISTORY */
 
 async function loadHistory(){
 
-  try{
+  eventLayer.clearLayers();
 
-    const response = await fetch('./history.json');
+  const response =
+    await fetch('./history.json');
 
-    const data = await response.json();
+  const data =
+    await response.json();
 
-    layer.clearLayers();
+  const feed =
+    document.getElementById(
+      "feed"
+    );
 
-    const feed = document.getElementById("feed");
-    feed.innerHTML = "";
+  feed.innerHTML = "";
 
-    let conflictCount = 0;
+  data.reverse().forEach(item=>{
 
-    data.reverse().forEach(item=>{
+    let color = "#ffffff";
+    let typeClass = "";
 
-      let color = "#ffffff";
-      let typeClass = "";
+    switch(item.type){
 
-      switch(item.type){
+      case "war":
+        color = "#ff5a5a";
+        typeClass = "war";
+        break;
 
-        case "war":
-          color = "#ff4d4d";
-          typeClass = "war";
-          conflictCount++;
-          break;
+      case "trade":
+        color = "#ffd166";
+        typeClass = "trade";
+        break;
 
-        case "trade":
-          color = "#ffd166";
-          typeClass = "trade";
-          break;
+      case "science":
+        color = "#7dd3fc";
+        typeClass = "science";
+        break;
 
-        case "science":
-          color = "#7dd3fc";
-          typeClass = "science";
-          break;
+      case "disaster":
+        color = "#ff875f";
+        typeClass = "disaster";
+        break;
 
-        case "disaster":
-          color = "#ff7b54";
-          typeClass = "disaster";
-          break;
+      default:
+        color = "#d4b5ff";
+        typeClass = "politics";
 
-        default:
-          color = "#d4b5ff";
-          typeClass = "politics";
+    }
 
-      }
+    createPulse(item,color);
 
-      /* PULSE */
+    /* FEED CARD */
 
-      const pulse = createPulse(
-        item.y,
-        item.x,
-        color,
-        8
-      );
+    const div =
+      document.createElement("div");
 
-      pulse.bindPopup(`
-        <div style="
-          color:white;
-          font-family:sans-serif;
-        ">
-          <b>${item.type}</b><br><br>
-          ${item.event}<br><br>
-          ${item.timestamp}
-        </div>
-      `);
+    div.className = "event";
 
-      /* FEED */
+    div.innerHTML = `
+      <div class="event-type ${typeClass}">
+        ${item.type}
+      </div>
 
-      const div = document.createElement("div");
+      <div class="event-text">
+        ${item.event}
+      </div>
 
-      div.className = "event";
+      <div class="event-meta">
+        ${item.faction}
+        • Severity ${item.severity}
+        • ${item.timestamp}
+      </div>
+    `;
 
-      div.innerHTML = `
-        <div class="event-type ${typeClass}">
-          ${item.type}
-        </div>
+    feed.prepend(div);
 
-        <div class="event-text">
-          ${item.event}
-        </div>
-
-        <div class="event-meta">
-          X:${item.x} • Y:${item.y}
-          • ${item.timestamp}
-        </div>
-      `;
-
-      feed.prepend(div);
-
-    });
-
-    document.getElementById("events").innerText =
-      data.length;
-
-    document.getElementById("conflicts").innerText =
-      conflictCount;
-
-  }catch(err){
-
-    console.error(err);
-
-  }
+  });
 
 }
 
-/* LOAD */
+/* INIT */
 
-loadHistory();
+async function init(){
+
+  await loadWorld();
+
+  await loadFactions();
+
+  await loadHistory();
+
+}
+
+init();
 
 /* AUTO REFRESH */
 
-setInterval(loadHistory,15000);
+setInterval(init,15000);
 
 </script>
 
 </body>
-</html>
+  </html>
