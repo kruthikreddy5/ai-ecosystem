@@ -23,5 +23,19 @@
     "timestamp": "9:39:03 AM",
     "id": 2,
     "createdAt": 1778233143401
+  },
+  {
+    "x": 30,
+    "y": 50,
+    "event": "The Sol Union launches a massive propaganda campaign, painting itself as a beacon of peace and prosperity in a desperate attempt to shift public opinion towards its favor.",
+    "type": "politics",
+    "severity": 6,
+    "faction": "Sol Union",
+    "radius": 15,
+    "impact": 40,
+    "lifespan": 90,
+    "timestamp": "9:43:48 AM",
+    "createdAt": 1778233428888,
+    "id": 3
   }
 ]
