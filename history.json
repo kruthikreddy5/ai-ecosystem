@@ -68,5 +68,19 @@
     "timestamp": "11:44:09 AM",
     "createdAt": 1778240649987,
     "id": 5
+  },
+  {
+    "x": 28,
+    "y": 25,
+    "event": "Helios Directorate launches a surprise counterattack against Sol Union's weakened eastern territories, capturing key infrastructure and shifting the balance of power in the escalating Helios-Northern Conflict.",
+    "type": "war",
+    "severity": 4,
+    "faction": "Helios Directorate",
+    "radius": 40,
+    "impact": 45,
+    "lifespan": 300,
+    "timestamp": "12:59:32 PM",
+    "createdAt": 1778245172634,
+    "id": 6
   }
 ]
