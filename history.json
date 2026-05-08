@@ -12,5 +12,19 @@
     "timestamp": "9:47:56 AM",
     "createdAt": 1778233676281,
     "id": 1
+  },
+  {
+    "x": 45,
+    "y": 25,
+    "event": "Northern Accord seeks a non-aggression pact to protect their western borders from the escalating Helios-Northern Conflict, but Helios Directorate rebuffs their overtures and continues to push forward.",
+    "type": "politics",
+    "severity": 2,
+    "faction": "Helios Directorate",
+    "radius": 20,
+    "impact": 30,
+    "lifespan": 60,
+    "timestamp": "9:48:46 AM",
+    "createdAt": 1778233726491,
+    "id": 2
   }
 ]
