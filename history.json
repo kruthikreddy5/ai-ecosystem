@@ -152,5 +152,19 @@
     "timestamp": "8:06:10 PM",
     "createdAt": 1778270770456,
     "id": 11
+  },
+  {
+    "x": 75,
+    "y": 55,
+    "event": "Tensions between the Helios Directorate and Sol Union escalate as a devastating solar flare ravages the Helios Directorate's newly acquired planetoid, Delta-9.",
+    "type": "war",
+    "severity": 2,
+    "faction": "Helios Directorate",
+    "radius": 35,
+    "impact": 55,
+    "lifespan": 120,
+    "timestamp": "9:14:44 PM",
+    "createdAt": 1778274884785,
+    "id": 12
   }
 ]
