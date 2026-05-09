@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "x": 12,
+    "y": 15,
+    "event": "trade",
+    "type": "trade",
+    "faction": "Helios Directorate",
+    "timestamp": "6:44:53 AM",
+    "createdAt": 1778309093367,
+    "severity": 8,
+    "lifespan": 120
+  }
+]

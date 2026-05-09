@@ -2,7 +2,13 @@
   "activeSystems": [
     "war",
     "trade",
-    "science"
+    "science",
+    "religion"
   ],
-  "discoveredSystems": []
+  "discoveredSystems": [
+    {
+      "name": "religion",
+      "discoveredAt": "5/9/2026, 6:44:53 AM"
+    }
+  ]
 }

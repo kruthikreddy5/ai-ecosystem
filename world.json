@@ -1,9 +1,9 @@
 {
-  "cycle": 0,
+  "cycle": 1,
   "era": "Genesis",
-  "stability": 72,
-  "economy": 68,
-  "warLevel": 30,
-  "socialTension": 25,
-  "mood": "stable"
+  "stability": -8,
+  "economy": -5,
+  "warLevel": 31,
+  "socialTension": 31,
+  "mood": "tense"
 }
