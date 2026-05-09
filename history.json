@@ -222,5 +222,19 @@
     "timestamp": "3:53:35 AM",
     "createdAt": 1778298815991,
     "id": 16
+  },
+  {
+    "x": 22,
+    "y": 35,
+    "event": "In a bold gamble, the Helios Directorate launches a daring expedition to colonize the long-abandoned research outpost on planet Xeridia, a move that could either secure a vital source of advanced technology or seal the Directorate's fate in a distant and unforgiving corner of the galaxy.",
+    "type": "science",
+    "severity": 2,
+    "faction": "Helios Directorate",
+    "radius": 15,
+    "impact": 40,
+    "lifespan": 240,
+    "timestamp": "6:09:40 AM",
+    "createdAt": 1778306980643,
+    "id": 17
   }
 ]
