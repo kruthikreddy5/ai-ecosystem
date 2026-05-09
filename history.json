@@ -9,5 +9,16 @@
     "createdAt": 1778309093367,
     "severity": 8,
     "lifespan": 120
+  },
+  {
+    "x": 25,
+    "y": 17,
+    "event": "demonstration",
+    "type": "politics",
+    "faction": "Sol Union",
+    "timestamp": "6:59:10 AM",
+    "createdAt": 1778309950103,
+    "severity": 6,
+    "lifespan": 120
   }
 ]
