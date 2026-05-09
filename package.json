@@ -1,12 +1,8 @@
 {
-  "name": "vrindavan-world-engine",
+  "name": "vrindavan",
   "version": "1.0.0",
-  "description": "AI Civilization Simulation",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
+  "type": "commonjs",
   "dependencies": {
-    "groq-sdk": "^0.5.0"
+    "groq-sdk": "^0.7.0"
   }
 }
