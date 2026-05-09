@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Vrindavan — Synthetic Earth</title>
 
@@ -11,6 +11,8 @@
 rel="stylesheet"
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <style>
 
@@ -24,56 +26,17 @@ html,body{
   width:100%;
   height:100%;
   overflow:hidden;
+  background:#02050b;
   font-family:Inter,system-ui,sans-serif;
-  background:#03060d;
   color:white;
-}
-
-/* BACKGROUND */
-
-body{
-  background:
-    radial-gradient(circle at top,
-    #15253d 0%,
-    #09111d 35%,
-    #03060d 100%);
-}
-
-/* STARS */
-
-.stars{
-  position:fixed;
-  inset:0;
-  background-image:
-    radial-gradient(white .8px, transparent .8px);
-  background-size:140px 140px;
-  opacity:.07;
-  pointer-events:none;
-}
-
-/* SCANLINES */
-
-.scanlines{
-  position:fixed;
-  inset:0;
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      rgba(255,255,255,.01),
-      rgba(255,255,255,.01) 1px,
-      transparent 1px,
-      transparent 4px
-    );
-  pointer-events:none;
-  z-index:999;
 }
 
 /* APP */
 
 .app{
-  display:flex;
   width:100%;
   height:100vh;
+  display:flex;
 }
 
 /* MAP */
@@ -81,31 +44,17 @@ body{
 #map{
   flex:1;
   height:100%;
-  background:#03060d;
+  background:#02050b;
   position:relative;
-}
-
-/* ATMOSPHERE */
-
-.atmosphere{
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(circle at center,
-    transparent 40%,
-    rgba(0,0,0,.6));
-  pointer-events:none;
-  z-index:500;
 }
 
 /* PANEL */
 
 .panel{
   width:360px;
-  height:100%;
-  background:rgba(8,12,20,.88);
-  backdrop-filter:blur(20px);
+  background:rgba(7,10,18,.92);
   border-left:1px solid rgba(255,255,255,.05);
+  backdrop-filter:blur(20px);
   display:flex;
   flex-direction:column;
   overflow:hidden;
@@ -119,15 +68,14 @@ body{
 }
 
 .title{
-  font-size:30px;
+  font-size:34px;
   font-weight:700;
-  letter-spacing:1px;
 }
 
 .subtitle{
-  margin-top:8px;
+  margin-top:10px;
   font-size:13px;
-  line-height:1.6;
+  line-height:1.7;
   color:rgba(255,255,255,.45);
 }
 
@@ -142,9 +90,9 @@ body{
 
 .stat{
   background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.04);
   border-radius:18px;
   padding:16px;
+  border:1px solid rgba(255,255,255,.04);
 }
 
 .stat-label{
@@ -155,21 +103,8 @@ body{
 }
 
 .stat-value{
-  font-size:22px;
+  font-size:24px;
   font-weight:700;
-}
-
-/* NARRATION */
-
-.narration{
-  margin:0 20px 20px;
-  padding:18px;
-  border-radius:18px;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.04);
-  color:rgba(255,255,255,.72);
-  line-height:1.6;
-  font-size:14px;
 }
 
 /* FEED */
@@ -183,8 +118,8 @@ body{
 .feed-title{
   margin-bottom:14px;
   font-size:12px;
-  letter-spacing:1px;
   text-transform:uppercase;
+  letter-spacing:1px;
   color:rgba(255,255,255,.4);
 }
 
@@ -194,30 +129,18 @@ body{
   border-radius:18px;
   padding:18px;
   margin-bottom:14px;
-  animation:fade .5s ease;
-}
-
-@keyframes fade{
-  from{
-    opacity:0;
-    transform:translateY(10px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
 }
 
 .event-type{
-  margin-bottom:10px;
   font-size:11px;
+  margin-bottom:10px;
   text-transform:uppercase;
   letter-spacing:1px;
 }
 
 .event-text{
+  line-height:1.7;
   font-size:14px;
-  line-height:1.6;
   color:rgba(255,255,255,.85);
 }
 
@@ -252,11 +175,24 @@ body{
 /* LEAFLET */
 
 .leaflet-container{
-  background:#03060d !important;
+  background:#02050b !important;
 }
 
 .leaflet-control-attribution{
   display:none;
+}
+
+/* ATMOSPHERE */
+
+.atmosphere{
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at center,
+    transparent 50%,
+    rgba(0,0,0,.55));
+  pointer-events:none;
+  z-index:500;
 }
 
 /* MOBILE */
@@ -268,9 +204,7 @@ body{
   }
 
   #map{
-    width:100%;
-    height:60vh !important;
-    min-height:60vh;
+    height:60vh;
   }
 
   .panel{
@@ -286,9 +220,6 @@ body{
 </head>
 
 <body>
-
-<div class="stars"></div>
-<div class="scanlines"></div>
 
 <div class="app">
 
@@ -335,10 +266,6 @@ body{
 
     </div>
 
-    <div class="narration" id="narration">
-      Civilization patterns stabilizing.
-    </div>
-
     <div class="feed">
 
       <div class="feed-title">
@@ -353,8 +280,6 @@ body{
 
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <script>
 
 /* =========================
@@ -364,11 +289,18 @@ body{
 const map = L.map("map",{
   crs:L.CRS.Simple,
   minZoom:-2,
-  maxZoom:5,
+  maxZoom:3,
   zoomControl:false
 });
 
-const bounds = [[0,0],[100,100]];
+/* EARTH IMAGE */
+
+const bounds = [[0,0],[1000,2000]];
+
+L.imageOverlay(
+  "https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg",
+  bounds
+).addTo(map);
 
 map.fitBounds(bounds);
 
@@ -378,49 +310,19 @@ window.addEventListener("load",()=>{
 
   setTimeout(()=>{
     map.invalidateSize();
-  },600);
+  },700);
 
 });
 
-/* =========================
-   VISIBLE GRID
-========================= */
-
-for(let i=0;i<=100;i+=10){
-
-  L.polyline(
-    [[i,0],[i,100]],
-    {
-      color:"rgba(255,255,255,.12)",
-      weight:1,
-      interactive:false
-    }
-  ).addTo(map);
-
-  L.polyline(
-    [[0,i],[100,i]],
-    {
-      color:"rgba(255,255,255,.12)",
-      weight:1,
-      interactive:false
-    }
-  ).addTo(map);
-
-}
-
-/* =========================
-   LAYERS
-========================= */
-
-const territoryLayer =
-  L.layerGroup().addTo(map);
+/* LAYERS */
 
 const eventLayer =
   L.layerGroup().addTo(map);
 
-/* =========================
-   SAFE FETCH
-========================= */
+const factionLayer =
+  L.layerGroup().addTo(map);
+
+/* SAFE FETCH */
 
 async function safeFetch(file){
 
@@ -428,16 +330,8 @@ async function safeFetch(file){
 
     const response =
       await fetch(
-        file + '?t=' + Date.now()
+        file + "?t=" + Date.now()
       );
-
-    if(!response.ok){
-
-      throw new Error(
-        "Failed to load " + file
-      );
-
-    }
 
     return await response.json();
 
@@ -453,370 +347,224 @@ async function safeFetch(file){
 
 }
 
-/* =========================
-   WORLD
-========================= */
+/* WORLD */
 
 async function loadWorld(){
 
   const world =
     await safeFetch("world.json");
 
-  if(!world){
-
-    console.log("No world data");
-
-    return;
-
-  }
-
-  console.log("WORLD:",world);
+  if(!world) return;
 
   document.getElementById(
     "stability"
   ).innerText =
-    (world.stability || 0) + "%";
+    world.stability + "%";
 
   document.getElementById(
     "economy"
   ).innerText =
-    (world.economy || 0) + "%";
+    world.economy + "%";
 
   document.getElementById(
     "cycle"
   ).innerText =
-    world.cycle || 0;
+    world.cycle;
 
   document.getElementById(
     "era"
   ).innerText =
-    world.era || "Unknown";
-
-  /* NARRATION */
-
-  let text = "";
-
-  if((world.stability || 0) < 40){
-
-    text =
-      "Global instability rising across multiple regions.";
-
-  }
-
-  else if((world.economy || 0) > 80){
-
-    text =
-      "Trade systems flourishing between major factions.";
-
-  }
-
-  else{
-
-    text =
-      "Civilization patterns stabilizing.";
-
-  }
-
-  document.getElementById(
-    "narration"
-  ).innerText = text;
+    world.era;
 
 }
 
-/* =========================
-   FACTIONS
-========================= */
+/* EVENTS */
 
-async function loadFactions(){
+function pulseEvent(x,y,color,size){
 
-  territoryLayer.clearLayers();
-
-  const factions =
-    await safeFetch("factions.json");
-
-  if(!factions){
-
-    console.log("No faction data");
-
-    return;
-
-  }
-
-  console.log("FACTIONS:",factions);
-
-  factions.forEach(f=>{
-
-    const color =
-      f.color || "#7dd3fc";
-
-    const aggression =
-      f.aggression || 5;
-
-    const x =
-      f.x || 50;
-
-    const y =
-      f.y || 50;
-
-    /* TERRITORY */
-
-    L.circle(
-      [y,x],
-      {
-        radius:aggression * 90000,
-        color:color,
-        fillColor:color,
-        fillOpacity:.10,
-        weight:1
-      }
-    ).addTo(territoryLayer);
-
-    /* CENTER */
-
+  const marker =
     L.circleMarker(
       [y,x],
       {
-        radius:7,
+        radius:size,
         color:color,
         fillColor:color,
-        fillOpacity:1,
-        weight:2
+        fillOpacity:.6,
+        weight:1
       }
-    ).addTo(territoryLayer);
+    ).addTo(eventLayer);
 
-  });
+  let growing = true;
+
+  let radius = size;
+
+  setInterval(()=>{
+
+    if(growing){
+
+      radius += .5;
+
+      if(radius > size + 8){
+
+        growing = false;
+
+      }
+
+    }
+
+    else{
+
+      radius -= .5;
+
+      if(radius < size){
+
+        growing = true;
+
+      }
+
+    }
+
+    marker.setRadius(radius);
+
+  },90);
 
 }
 
-/* =========================
-   EVENT PULSE
-========================= */
-
-function createPulse(item,color){
-
-  try{
-
-    const x =
-      Number(item.x) || 50;
-
-    const y =
-      Number(item.y) || 50;
-
-    const severity =
-      Number(item.severity) || 5;
-
-    const lifespan =
-      Number(item.lifespan) || 120;
-
-    const createdAt =
-      Number(item.createdAt) || Date.now();
-
-    const size =
-      severity * 1.8;
-
-    const age =
-      (Date.now() - createdAt) / 1000;
-
-    const opacity =
-      Math.max(
-        0.2,
-        1 - age / lifespan
-      );
-
-    const marker =
-      L.circleMarker(
-        [y,x],
-        {
-          radius:size,
-          color:color,
-          fillColor:color,
-          fillOpacity:opacity,
-          opacity:opacity,
-          weight:1
-        }
-      );
-
-    marker.addTo(eventLayer);
-
-    /* ANIMATION */
-
-    let growing = true;
-
-    let radius = size;
-
-    setInterval(()=>{
-
-      if(growing){
-
-        radius += .4;
-
-        if(radius > size + 6){
-
-          growing = false;
-
-        }
-
-      }
-
-      else{
-
-        radius -= .4;
-
-        if(radius < size){
-
-          growing = true;
-
-        }
-
-      }
-
-      marker.setRadius(radius);
-
-    },90);
-
-  }
-
-  catch(err){
-
-    console.error(
-      "Pulse error:",
-      err
-    );
-
-  }
-
-}
-
-/* =========================
-   HISTORY
-========================= */
+/* HISTORY */
 
 async function loadHistory(){
 
   eventLayer.clearLayers();
 
-  const data =
+  const history =
     await safeFetch("history.json");
 
-  if(!data){
-
-    console.log("No history data");
-
-    return;
-
-  }
-
-  console.log("HISTORY:",data);
+  if(!history) return;
 
   const feed =
-    document.getElementById(
-      "feed"
-    );
+    document.getElementById("feed");
 
   feed.innerHTML = "";
 
-  [...data].reverse().forEach(item=>{
+  [...history].reverse().forEach(item=>{
 
-    try{
+    let color = "#ffffff";
+    let typeClass = "";
 
-      let color = "#ffffff";
-      let typeClass = "";
+    switch(item.type){
 
-      switch(item.type){
+      case "war":
+        color = "#ff5a5a";
+        typeClass = "war";
+        break;
 
-        case "war":
-          color = "#ff5a5a";
-          typeClass = "war";
-          break;
+      case "trade":
+        color = "#ffd166";
+        typeClass = "trade";
+        break;
 
-        case "trade":
-          color = "#ffd166";
-          typeClass = "trade";
-          break;
+      case "science":
+        color = "#7dd3fc";
+        typeClass = "science";
+        break;
 
-        case "science":
-          color = "#7dd3fc";
-          typeClass = "science";
-          break;
+      case "disaster":
+        color = "#ff875f";
+        typeClass = "disaster";
+        break;
 
-        case "disaster":
-          color = "#ff875f";
-          typeClass = "disaster";
-          break;
-
-        default:
-          color = "#d4b5ff";
-          typeClass = "politics";
-
-      }
-
-      /* MAP EVENT */
-
-      createPulse(item,color);
-
-      /* FEED */
-
-      const div =
-        document.createElement("div");
-
-      div.className = "event";
-
-      div.innerHTML = `
-        <div class="event-type ${typeClass}">
-          ${item.type || "unknown"}
-        </div>
-
-        <div class="event-text">
-          ${item.event || "No description"}
-        </div>
-
-        <div class="event-meta">
-          ${item.faction || "Unknown"}
-          • Severity ${item.severity || 5}
-          • ${item.timestamp || ""}
-        </div>
-      `;
-
-      feed.prepend(div);
+      default:
+        color = "#d4b5ff";
+        typeClass = "politics";
 
     }
 
-    catch(err){
+    /* MAP POSITION */
 
-      console.error(
-        "History item failed:",
-        err
-      );
+    const mapX =
+      item.x * 20;
 
-    }
+    const mapY =
+      item.y * 10;
+
+    pulseEvent(
+      mapX,
+      mapY,
+      color,
+      item.severity || 5
+    );
+
+    /* FEED */
+
+    const div =
+      document.createElement("div");
+
+    div.className = "event";
+
+    div.innerHTML = `
+      <div class="event-type ${typeClass}">
+        ${item.type}
+      </div>
+
+      <div class="event-text">
+        ${item.event}
+      </div>
+
+      <div class="event-meta">
+        ${item.timestamp}
+      </div>
+    `;
+
+    feed.appendChild(div);
 
   });
 
 }
 
-/* =========================
-   INIT
-========================= */
+/* FACTIONS */
+
+async function loadFactions(){
+
+  factionLayer.clearLayers();
+
+  const factions =
+    await safeFetch("factions.json");
+
+  if(!factions) return;
+
+  factions.forEach(f=>{
+
+    const x = f.x * 20;
+    const y = f.y * 10;
+
+    L.circle(
+      [y,x],
+      {
+        radius:f.influence * 8000,
+        color:f.color,
+        fillColor:f.color,
+        fillOpacity:.08,
+        weight:1
+      }
+    ).addTo(factionLayer);
+
+  });
+
+}
+
+/* INIT */
 
 async function init(){
 
-  console.log("Vrindavan loading...");
-
   await loadWorld();
-
-  await loadFactions();
 
   await loadHistory();
 
-  console.log("Vrindavan ready.");
+  await loadFactions();
 
 }
 
 init();
-
-/* =========================
-   AUTO REFRESH
-========================= */
 
 setInterval(init,15000);
 
