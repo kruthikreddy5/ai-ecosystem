@@ -208,5 +208,19 @@
     "timestamp": "12:08:48 AM",
     "createdAt": 1778285328698,
     "id": 15
+  },
+  {
+    "x": 32,
+    "y": 68,
+    "event": "Tensions between Helios Directorate and Northern Accord erupt as the Helios Directorate seizes control of a key transportation hub on the neutral planet, Kael-2, citing concerns over security and trade disruption.",
+    "type": "war",
+    "severity": 3,
+    "faction": "Helios Directorate",
+    "radius": 30,
+    "impact": 65,
+    "lifespan": 270,
+    "timestamp": "3:53:35 AM",
+    "createdAt": 1778298815991,
+    "id": 16
   }
 ]
