@@ -1,278 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Vrindavan — Synthetic Earth</title>
+<title>Vrindavan</title>
 
-<link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
+<link rel="stylesheet" href="style.css">
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<style>
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-html,body{
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:#02050b;
-  font-family:Inter,system-ui,sans-serif;
-  color:white;
-}
-
-/* APP */
-
-.app{
-  width:100%;
-  height:100vh;
-  display:flex;
-}
-
-/* MAP */
-
-#map{
-  flex:1;
-  height:100%;
-  background:#02050b;
-  position:relative;
-}
-
-/* PANEL */
-
-.panel{
-  width:360px;
-  background:rgba(7,10,18,.92);
-  border-left:1px solid rgba(255,255,255,.05);
-  backdrop-filter:blur(20px);
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-
-/* HEADER */
-
-.header{
-  padding:28px;
-  border-bottom:1px solid rgba(255,255,255,.05);
-}
-
-.title{
-  font-size:34px;
-  font-weight:700;
-}
-
-.subtitle{
-  margin-top:10px;
-  font-size:13px;
-  line-height:1.7;
-  color:rgba(255,255,255,.45);
-}
-
-/* STATS */
-
-.stats{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-  padding:20px;
-}
-
-.stat{
-  background:rgba(255,255,255,.03);
-  border-radius:18px;
-  padding:16px;
-  border:1px solid rgba(255,255,255,.04);
-}
-
-.stat-label{
-  font-size:11px;
-  text-transform:uppercase;
-  color:rgba(255,255,255,.4);
-  margin-bottom:8px;
-}
-
-.stat-value{
-  font-size:24px;
-  font-weight:700;
-}
-
-/* FEED */
-
-.feed{
-  flex:1;
-  overflow-y:auto;
-  padding:20px;
-}
-
-.feed-title{
-  margin-bottom:14px;
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  color:rgba(255,255,255,.4);
-}
-
-.event{
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.05);
-  border-radius:18px;
-  padding:18px;
-  margin-bottom:14px;
-}
-
-.event-type{
-  font-size:11px;
-  margin-bottom:10px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-.event-text{
-  line-height:1.7;
-  font-size:14px;
-  color:rgba(255,255,255,.85);
-}
-
-.event-meta{
-  margin-top:12px;
-  font-size:11px;
-  color:rgba(255,255,255,.35);
-}
-
-/* COLORS */
-
-.war{
-  color:#ff5a5a;
-}
-
-.trade{
-  color:#ffd166;
-}
-
-.science{
-  color:#7dd3fc;
-}
-
-.disaster{
-  color:#ff875f;
-}
-
-.politics{
-  color:#d4b5ff;
-}
-
-/* LEAFLET */
-
-.leaflet-container{
-  background:#02050b !important;
-}
-
-.leaflet-control-attribution{
-  display:none;
-}
-
-/* ATMOSPHERE */
-
-.atmosphere{
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(circle at center,
-    transparent 50%,
-    rgba(0,0,0,.55));
-  pointer-events:none;
-  z-index:500;
-}
-
-/* MOBILE */
-
-@media(max-width:900px){
-
-  .app{
-    flex-direction:column;
-  }
-
-  #map{
-    height:60vh;
-  }
-
-  .panel{
-    width:100%;
-    height:40vh;
-    border-left:none;
-    border-top:1px solid rgba(255,255,255,.05);
-  }
-
-}
-
-</style>
 </head>
 
 <body>
 
-<div class="app">
+<div class="background-glow"></div>
 
-  <div id="map">
-    <div class="atmosphere"></div>
+<div class="topbar">
+
+  <div class="logo">
+    VRINDAVAN
   </div>
 
-  <div class="panel">
+  <div class="status">
+    SYNTHETIC CIVILIZATION ACTIVE
+  </div>
 
-    <div class="header">
+  <div class="clock" id="clock">
+    00:00
+  </div>
 
-      <div class="title">
-        Vrindavan
+</div>
+
+<div class="main">
+
+  <!-- LEFT -->
+  <div class="planet-section">
+
+    <div class="planet-container">
+
+      <img
+        src="./assets/world-map.png"
+        class="world-map"
+        id="worldMap"
+      >
+
+      <div id="eventLayer"></div>
+
+    </div>
+
+  </div>
+
+  <!-- RIGHT -->
+  <div class="side-panel">
+
+    <div class="panel-block">
+
+      <div class="panel-title">
+        WORLD STATUS
       </div>
 
-      <div class="subtitle">
-        Synthetic civilization observation layer.<br>
-        Monitoring geopolitical evolution in real time.
+      <div class="stats">
+
+        <div class="card">
+          <span>Stability</span>
+          <h2 id="stability">0%</h2>
+        </div>
+
+        <div class="card">
+          <span>Economy</span>
+          <h2 id="economy">0%</h2>
+        </div>
+
+        <div class="card">
+          <span>Era</span>
+          <h2 id="era">Genesis</h2>
+        </div>
+
+        <div class="card">
+          <span>Cycle</span>
+          <h2 id="cycle">0</h2>
+        </div>
+
       </div>
 
     </div>
 
-    <div class="stats">
+    <div class="panel-block">
 
-      <div class="stat">
-        <div class="stat-label">Stability</div>
-        <div class="stat-value" id="stability">0%</div>
+      <div class="panel-title">
+        AI THOUGHTS
       </div>
 
-      <div class="stat">
-        <div class="stat-label">Economy</div>
-        <div class="stat-value" id="economy">0%</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Cycle</div>
-        <div class="stat-value" id="cycle">0</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Era</div>
-        <div class="stat-value" id="era">Unknown</div>
-      </div>
+      <div id="thoughtFeed"></div>
 
     </div>
 
-    <div class="feed">
+    <div class="panel-block">
 
-      <div class="feed-title">
-        World Feed
+      <div class="panel-title">
+        WORLD EVENTS
       </div>
 
-      <div id="feed"></div>
+      <div id="eventFeed"></div>
 
     </div>
 
@@ -280,295 +110,27 @@ html,body{
 
 </div>
 
-<script>
+<div class="bottom-controls">
 
-/* =========================
-   MAP
-========================= */
+  <button onclick="setMode('political')">
+    Political
+  </button>
 
-const map = L.map("map",{
-  crs:L.CRS.Simple,
-  minZoom:-2,
-  maxZoom:3,
-  zoomControl:false
-});
+  <button onclick="setMode('war')">
+    War
+  </button>
 
-/* EARTH IMAGE */
+  <button onclick="setMode('economy')">
+    Economy
+  </button>
 
-const bounds = [[0,0],[1000,2000]];
+  <button onclick="setMode('social')">
+    Social
+  </button>
 
-L.imageOverlay(
-  "https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg",
-  bounds
-).addTo(map);
+</div>
 
-map.fitBounds(bounds);
-
-/* MOBILE FIX */
-
-window.addEventListener("load",()=>{
-
-  setTimeout(()=>{
-    map.invalidateSize();
-  },700);
-
-});
-
-/* LAYERS */
-
-const eventLayer =
-  L.layerGroup().addTo(map);
-
-const factionLayer =
-  L.layerGroup().addTo(map);
-
-/* SAFE FETCH */
-
-async function safeFetch(file){
-
-  try{
-
-    const response =
-      await fetch(
-        file + "?t=" + Date.now()
-      );
-
-    return await response.json();
-
-  }
-
-  catch(err){
-
-    console.error(err);
-
-    return null;
-
-  }
-
-}
-
-/* WORLD */
-
-async function loadWorld(){
-
-  const world =
-    await safeFetch("world.json");
-
-  if(!world) return;
-
-  document.getElementById(
-    "stability"
-  ).innerText =
-    world.stability + "%";
-
-  document.getElementById(
-    "economy"
-  ).innerText =
-    world.economy + "%";
-
-  document.getElementById(
-    "cycle"
-  ).innerText =
-    world.cycle;
-
-  document.getElementById(
-    "era"
-  ).innerText =
-    world.era;
-
-}
-
-/* EVENTS */
-
-function pulseEvent(x,y,color,size){
-
-  const marker =
-    L.circleMarker(
-      [y,x],
-      {
-        radius:size,
-        color:color,
-        fillColor:color,
-        fillOpacity:.6,
-        weight:1
-      }
-    ).addTo(eventLayer);
-
-  let growing = true;
-
-  let radius = size;
-
-  setInterval(()=>{
-
-    if(growing){
-
-      radius += .5;
-
-      if(radius > size + 8){
-
-        growing = false;
-
-      }
-
-    }
-
-    else{
-
-      radius -= .5;
-
-      if(radius < size){
-
-        growing = true;
-
-      }
-
-    }
-
-    marker.setRadius(radius);
-
-  },90);
-
-}
-
-/* HISTORY */
-
-async function loadHistory(){
-
-  eventLayer.clearLayers();
-
-  const history =
-    await safeFetch("history.json");
-
-  if(!history) return;
-
-  const feed =
-    document.getElementById("feed");
-
-  feed.innerHTML = "";
-
-  [...history].reverse().forEach(item=>{
-
-    let color = "#ffffff";
-    let typeClass = "";
-
-    switch(item.type){
-
-      case "war":
-        color = "#ff5a5a";
-        typeClass = "war";
-        break;
-
-      case "trade":
-        color = "#ffd166";
-        typeClass = "trade";
-        break;
-
-      case "science":
-        color = "#7dd3fc";
-        typeClass = "science";
-        break;
-
-      case "disaster":
-        color = "#ff875f";
-        typeClass = "disaster";
-        break;
-
-      default:
-        color = "#d4b5ff";
-        typeClass = "politics";
-
-    }
-
-    /* MAP POSITION */
-
-    const mapX =
-      item.x * 20;
-
-    const mapY =
-      item.y * 10;
-
-    pulseEvent(
-      mapX,
-      mapY,
-      color,
-      item.severity || 5
-    );
-
-    /* FEED */
-
-    const div =
-      document.createElement("div");
-
-    div.className = "event";
-
-    div.innerHTML = `
-      <div class="event-type ${typeClass}">
-        ${item.type}
-      </div>
-
-      <div class="event-text">
-        ${item.event}
-      </div>
-
-      <div class="event-meta">
-        ${item.timestamp}
-      </div>
-    `;
-
-    feed.appendChild(div);
-
-  });
-
-}
-
-/* FACTIONS */
-
-async function loadFactions(){
-
-  factionLayer.clearLayers();
-
-  const factions =
-    await safeFetch("factions.json");
-
-  if(!factions) return;
-
-  factions.forEach(f=>{
-
-    const x = f.x * 20;
-    const y = f.y * 10;
-
-    L.circle(
-      [y,x],
-      {
-        radius:f.influence * 8000,
-        color:f.color,
-        fillColor:f.color,
-        fillOpacity:.08,
-        weight:1
-      }
-    ).addTo(factionLayer);
-
-  });
-
-}
-
-/* INIT */
-
-async function init(){
-
-  await loadWorld();
-
-  await loadHistory();
-
-  await loadFactions();
-
-}
-
-init();
-
-setInterval(init,15000);
-
-</script>
+<script src="app.js"></script>
 
 </body>
 </html>
