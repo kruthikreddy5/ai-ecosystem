@@ -194,5 +194,19 @@
     "timestamp": "11:09:54 PM",
     "createdAt": 1778281794170,
     "id": 14
+  },
+  {
+    "x": 30,
+    "y": 65,
+    "event": "The Helios Directorate launches a series of daring reconnaissance missions against the Sol Union's eastern borders, testing the Union's defenses and probing for weaknesses in their territorial integrity.",
+    "type": "war",
+    "severity": 2,
+    "faction": "Helios Directorate",
+    "radius": 25,
+    "impact": 55,
+    "lifespan": 180,
+    "timestamp": "12:08:48 AM",
+    "createdAt": 1778285328698,
+    "id": 15
   }
 ]
