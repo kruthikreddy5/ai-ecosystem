@@ -1,29 +1,18 @@
 [
   {
     "name": "Helios Directorate",
+    "x": 35,
+    "y": 40,
     "color": "#ff5a5a",
-    "aggression": 8,
-    "technology": 7,
-    "wealth": 6,
-    "x": 20,
-    "y": 40
-  },
-  {
-    "name": "Northern Accord",
-    "color": "#7dd3fc",
-    "aggression": 5,
-    "technology": 6,
-    "wealth": 7,
-    "x": 65,
-    "y": 30
+    "aggression": 7,
+    "influence": 62
   },
   {
     "name": "Sol Union",
-    "color": "#ffd166",
+    "x": 70,
+    "y": 60,
+    "color": "#7dd3fc",
     "aggression": 3,
-    "technology": 8,
-    "wealth": 9,
-    "x": 50,
-    "y": 70
+    "influence": 71
   }
 ]
