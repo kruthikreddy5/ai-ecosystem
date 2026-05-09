@@ -8,13 +8,313 @@
 
 <title>Vrindavan</title>
 
-<link rel="stylesheet" href="style.css">
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:Inter,Arial,sans-serif;
+  background:#020814;
+  color:white;
+}
+
+/* BACKGROUND */
+
+body{
+  background:
+  radial-gradient(circle at top,
+  #12233d 0%,
+  #07111f 40%,
+  #020814 100%);
+}
+
+/* STARS */
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:
+  radial-gradient(rgba(255,255,255,.8) 1px, transparent 1px);
+  background-size:140px 140px;
+  opacity:.08;
+  pointer-events:none;
+}
+
+/* TOP BAR */
+
+.topbar{
+  height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 25px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  background:rgba(0,0,0,.25);
+  backdrop-filter:blur(20px);
+}
+
+.logo{
+  font-size:26px;
+  font-weight:800;
+  letter-spacing:2px;
+}
+
+.status{
+  color:#74b9ff;
+  font-size:13px;
+  opacity:.8;
+}
+
+.clock{
+  opacity:.7;
+}
+
+/* MAIN */
+
+.main{
+  display:flex;
+  height:calc(100vh - 70px);
+}
+
+/* MAP SECTION */
+
+.map-section{
+  flex:1;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+/* PLANET */
+
+.planet{
+  width:70vw;
+  height:70vw;
+  max-width:850px;
+  max-height:850px;
+  border-radius:50%;
+  position:relative;
+
+  background:
+  radial-gradient(circle at 30% 30%,
+  rgba(120,180,255,.35),
+  rgba(50,80,140,.18) 35%,
+  rgba(10,20,40,.95) 70%);
+
+  box-shadow:
+  0 0 120px rgba(80,140,255,.15),
+  inset -80px -80px 120px rgba(0,0,0,.7);
+
+  overflow:hidden;
+
+  animation:rotatePlanet 120s linear infinite;
+}
+
+/* WORLD MAP */
+
+.world-map{
+  position:absolute;
+  inset:0;
+  background-image:url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg');
+  background-size:cover;
+  background-position:center;
+  opacity:.18;
+  mix-blend-mode:screen;
+}
+
+/* GRID */
+
+.grid{
+  position:absolute;
+  inset:0;
+  background-image:
+  linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+
+  background-size:40px 40px;
+  opacity:.35;
+}
+
+/* EVENTS */
+
+#eventLayer{
+  position:absolute;
+  inset:0;
+}
+
+.event{
+  position:absolute;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+}
+
+.event::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:inherit;
+  animation:pulse 2s infinite;
+}
+
+/* SIDE PANEL */
+
+.panel{
+  width:370px;
+  background:rgba(5,10,20,.82);
+  border-left:1px solid rgba(255,255,255,.05);
+  backdrop-filter:blur(20px);
+  overflow-y:auto;
+  padding:20px;
+}
+
+.panel-title{
+  font-size:12px;
+  letter-spacing:2px;
+  opacity:.5;
+  margin-bottom:16px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-bottom:25px;
+}
+
+.card{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:18px;
+  padding:16px;
+}
+
+.card span{
+  font-size:11px;
+  opacity:.5;
+}
+
+.card h2{
+  margin-top:10px;
+  font-size:28px;
+}
+
+.feed-item{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:14px;
+}
+
+.feed-item b{
+  display:block;
+  margin-bottom:10px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.feed-item p{
+  line-height:1.6;
+  opacity:.85;
+  margin-bottom:10px;
+}
+
+.feed-item small{
+  opacity:.45;
+}
+
+/* CONTROLS */
+
+.controls{
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:12px;
+  z-index:100;
+}
+
+.controls button{
+  border:none;
+  background:rgba(255,255,255,.06);
+  color:white;
+  padding:12px 18px;
+  border-radius:14px;
+  cursor:pointer;
+  backdrop-filter:blur(20px);
+}
+
+.controls button:hover{
+  background:rgba(100,160,255,.2);
+}
+
+/* ANIMATIONS */
+
+@keyframes pulse{
+
+  0%{
+    transform:scale(1);
+    opacity:1;
+  }
+
+  100%{
+    transform:scale(4);
+    opacity:0;
+  }
+
+}
+
+@keyframes rotatePlanet{
+
+  from{
+    transform:rotate(0deg);
+  }
+
+  to{
+    transform:rotate(360deg);
+  }
+
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+  .main{
+    flex-direction:column;
+  }
+
+  .planet{
+    width:95vw;
+    height:95vw;
+  }
+
+  .panel{
+    width:100%;
+    height:45vh;
+  }
+
+}
+
+</style>
 
 </head>
 
 <body>
-
-<div class="background-glow"></div>
 
 <div class="topbar">
 
@@ -34,103 +334,353 @@
 
 <div class="main">
 
-  <!-- LEFT -->
-  <div class="planet-section">
+  <!-- MAP -->
 
-    <div class="planet-container">
+  <div class="map-section">
 
-      <img
-        src="./assets/world-map.png"
-        class="world-map"
-        id="worldMap"
-      >
+    <div class="planet">
+
+      <div class="world-map"></div>
+
+      <div class="grid"></div>
 
       <div id="eventLayer"></div>
 
     </div>
 
-  </div>
+    <div class="controls">
 
-  <!-- RIGHT -->
-  <div class="side-panel">
+      <button onclick="setMode('political')">
+        Political
+      </button>
 
-    <div class="panel-block">
+      <button onclick="setMode('war')">
+        War
+      </button>
 
-      <div class="panel-title">
-        WORLD STATUS
-      </div>
+      <button onclick="setMode('economy')">
+        Economy
+      </button>
 
-      <div class="stats">
-
-        <div class="card">
-          <span>Stability</span>
-          <h2 id="stability">0%</h2>
-        </div>
-
-        <div class="card">
-          <span>Economy</span>
-          <h2 id="economy">0%</h2>
-        </div>
-
-        <div class="card">
-          <span>Era</span>
-          <h2 id="era">Genesis</h2>
-        </div>
-
-        <div class="card">
-          <span>Cycle</span>
-          <h2 id="cycle">0</h2>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="panel-block">
-
-      <div class="panel-title">
-        AI THOUGHTS
-      </div>
-
-      <div id="thoughtFeed"></div>
-
-    </div>
-
-    <div class="panel-block">
-
-      <div class="panel-title">
-        WORLD EVENTS
-      </div>
-
-      <div id="eventFeed"></div>
+      <button onclick="setMode('social')">
+        Social
+      </button>
 
     </div>
 
   </div>
 
+  <!-- PANEL -->
+
+  <div class="panel">
+
+    <div class="panel-title">
+      WORLD STATUS
+    </div>
+
+    <div class="stats">
+
+      <div class="card">
+        <span>Stability</span>
+        <h2 id="stability">0%</h2>
+      </div>
+
+      <div class="card">
+        <span>Economy</span>
+        <h2 id="economy">0%</h2>
+      </div>
+
+      <div class="card">
+        <span>Cycle</span>
+        <h2 id="cycle">0</h2>
+      </div>
+
+      <div class="card">
+        <span>Era</span>
+        <h2 id="era">Genesis</h2>
+      </div>
+
+    </div>
+
+    <div class="panel-title">
+      AI THOUGHTS
+    </div>
+
+    <div id="thoughtFeed"></div>
+
+    <div class="panel-title" style="margin-top:20px;">
+      WORLD EVENTS
+    </div>
+
+    <div id="eventFeed"></div>
+
+  </div>
+
 </div>
 
-<div class="bottom-controls">
+<script>
 
-  <button onclick="setMode('political')">
-    Political
-  </button>
+/* CLOCK */
 
-  <button onclick="setMode('war')">
-    War
-  </button>
+function updateClock(){
 
-  <button onclick="setMode('economy')">
-    Economy
-  </button>
+  document.getElementById(
+    "clock"
+  ).innerText =
+  new Date().toLocaleTimeString();
 
-  <button onclick="setMode('social')">
-    Social
-  </button>
+}
 
-</div>
+setInterval(updateClock,1000);
 
-<script src="app.js"></script>
+updateClock();
+
+/* MODE */
+
+function setMode(mode){
+
+  switch(mode){
+
+    case "war":
+
+      document.body.style.background =
+      "#140606";
+
+      break;
+
+    case "economy":
+
+      document.body.style.background =
+      "#07140a";
+
+      break;
+
+    case "social":
+
+      document.body.style.background =
+      "#13071a";
+
+      break;
+
+    default:
+
+      document.body.style.background =
+      "#020814";
+
+  }
+
+}
+
+/* COLORS */
+
+function getColor(type){
+
+  switch(type){
+
+    case "war":
+      return "#ff5a5a";
+
+    case "trade":
+      return "#ffd166";
+
+    case "science":
+      return "#7dd3fc";
+
+    case "politics":
+      return "#c77dff";
+
+    default:
+      return "#ffffff";
+
+  }
+
+}
+
+/* LOAD WORLD */
+
+async function loadWorld(){
+
+  try{
+
+    const world =
+    await fetch(
+      "./world.json?t=" + Date.now()
+    ).then(r=>r.json());
+
+    document.getElementById(
+      "stability"
+    ).innerText =
+    (world.stability || 0) + "%";
+
+    document.getElementById(
+      "economy"
+    ).innerText =
+    (world.economy || 0) + "%";
+
+    document.getElementById(
+      "cycle"
+    ).innerText =
+    world.cycle || 0;
+
+    document.getElementById(
+      "era"
+    ).innerText =
+    world.era || "Genesis";
+
+  }
+
+  catch(err){
+
+    console.log(err);
+
+  }
+
+}
+
+/* LOAD THOUGHTS */
+
+async function loadThoughts(){
+
+  try{
+
+    const thoughts =
+    await fetch(
+      "./thoughts.json?t=" + Date.now()
+    ).then(r=>r.json());
+
+    const feed =
+    document.getElementById(
+      "thoughtFeed"
+    );
+
+    feed.innerHTML = "";
+
+    thoughts.reverse().forEach(t=>{
+
+      const div =
+      document.createElement("div");
+
+      div.className =
+      "feed-item";
+
+      div.innerHTML = `
+        <p>${t.text}</p>
+        <small>${t.mood}</small>
+      `;
+
+      feed.appendChild(div);
+
+    });
+
+  }
+
+  catch(err){
+
+    console.log(err);
+
+  }
+
+}
+
+/* LOAD EVENTS */
+
+async function loadEvents(){
+
+  try{
+
+    const history =
+    await fetch(
+      "./history.json?t=" + Date.now()
+    ).then(r=>r.json());
+
+    const eventFeed =
+    document.getElementById(
+      "eventFeed"
+    );
+
+    const eventLayer =
+    document.getElementById(
+      "eventLayer"
+    );
+
+    eventFeed.innerHTML = "";
+
+    eventLayer.innerHTML = "";
+
+    history.reverse().forEach(item=>{
+
+      /* FEED */
+
+      const feed =
+      document.createElement("div");
+
+      feed.className =
+      "feed-item";
+
+      feed.innerHTML = `
+        <b style="color:${getColor(item.type)}">
+          ${item.type}
+        </b>
+
+        <p>
+          ${item.event}
+        </p>
+
+        <small>
+          ${item.timestamp}
+        </small>
+      `;
+
+      eventFeed.appendChild(feed);
+
+      /* DOT */
+
+      const dot =
+      document.createElement("div");
+
+      dot.className =
+      "event";
+
+      dot.style.background =
+      getColor(item.type);
+
+      dot.style.left =
+      item.x + "%";
+
+      dot.style.top =
+      item.y + "%";
+
+      eventLayer.appendChild(dot);
+
+    });
+
+  }
+
+  catch(err){
+
+    console.log(err);
+
+  }
+
+}
+
+/* INIT */
+
+async function init(){
+
+  await loadWorld();
+
+  await loadThoughts();
+
+  await loadEvents();
+
+}
+
+init();
+
+setInterval(init,15000);
+
+</script>
 
 </body>
 </html>
